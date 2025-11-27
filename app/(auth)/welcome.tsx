@@ -32,13 +32,20 @@ const Welcome = () => {
             </Typo>
           </View>
           <View style={{alignItems: "center", gap: 2}}>
-            <Typo size={17} fontWeight={"800"}>
-              Always Take control
+            <Typo size={17} color={colors.textLight}>
+              Finances must be arrenged to set a better
             </Typo>
-            <Typo size={17} fontWeight={"800"}>
-               of your Spendings
+            <Typo size={17} color={colors.textLight}>
+               lifestyle in future...
             </Typo>
           </View>
+          
+          <View style={styles.buttonContainer}>
+           ///button
+
+           
+          </View>
+
         </View>
       </View>
     </ScreenWrapper>

@@ -1,11 +1,12 @@
 import BackButton from '@/components/BackButton'
+import Buttton from '@/components/Buttton'
 import Input from '@/components/Input'
 import ScreenWrapper from '@/components/ScreenWrapper'
 import Typo from '@/components/Typo'
 import { colors, spacingX, spacingY } from '@/constants/theme'
 import { verticalScale } from '@/utils/styling'
 import * as Icons from 'phosphor-react-native'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 
 
@@ -13,6 +14,8 @@ const Login = () => {
 
   const emailRef = useRef("");
   const passwordRef = useRef("");
+  const [isLoading , setIsLoading] = useState(false);
+  const handleSubmit =  async () => {};
 
   return (
     <ScreenWrapper>
@@ -49,7 +52,11 @@ const Login = () => {
             />
 
             <Typo size={14} color={colors.text} style={{alignSelf: "flex-end"}}>Forgot Password?</Typo>
-            
+            <Buttton loading={} onPressIn={handleSubmit}>
+                <Typo fontWeight='700' color={colors.black} size={21}>
+                  Login
+                </Typo>
+            </Buttton>
            
         </View>
       {/* footer */}

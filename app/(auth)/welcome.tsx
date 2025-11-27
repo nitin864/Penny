@@ -31,6 +31,14 @@ const Welcome = () => {
                of your Spendings
             </Typo>
           </View>
+          <View style={{alignItems: "center", gap: 2}}>
+            <Typo size={17} fontWeight={"800"}>
+              Always Take control
+            </Typo>
+            <Typo size={17} fontWeight={"800"}>
+               of your Spendings
+            </Typo>
+          </View>
         </View>
       </View>
     </ScreenWrapper>

@@ -23,4 +23,10 @@ export const verticalScale = (size: number) =>
       (longDimension / guidelineBaseHeight) * (size as number)
     )
   );
- 
+
+  export const horizontalScale = (size: number) =>
+  Math.round(
+    PixelRatio.roundToNearestPixel(
+      (SCREEN_WIDTH / guidelineBaseWidth) * size
+    )
+  );

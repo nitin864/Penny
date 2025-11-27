@@ -2,13 +2,13 @@ import { colors } from '@/constants/theme'
  
 import { useRouter } from 'expo-router'
 import React, { useEffect } from 'react'
-import { Image, StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, View, } from 'react-native'
 
 
 const index = () => {
 
   const router = useRouter();
-  useEffect(() => {
+    useEffect(() => {
     setTimeout(() => {
       router.push('/(auth)/welcome')
     }, 2000)
@@ -36,7 +36,8 @@ const styles = StyleSheet.create({
     height: "20%",
     aspectRatio: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    marginLeft: 87
   }
 
 })

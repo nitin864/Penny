@@ -1,3 +1,4 @@
+import Buttton from "@/components/Buttton";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Typo from "@/components/Typo";
 import { colors, spacingX, spacingY } from "@/constants/theme";
@@ -42,8 +43,12 @@ const Welcome = () => {
           
           <View style={styles.buttonContainer}>
            ///button
+            <Buttton>
+              <Typo size={22} color={colors.neutral900} fontWeight={"600"}>
+                Get Started
+              </Typo>
+            </Buttton>
 
-           
           </View>
 
         </View>

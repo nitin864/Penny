@@ -29,16 +29,11 @@ backButton: {
   backgroundColor: "rgba(255,255,255,0.15)", // subtle frosted circle
   justifyContent: "center",
   alignItems: "center",
-
-  // shadow for iOS & Android
-  shadowColor: "#000",
-  shadowOpacity: 0.12,
-  shadowRadius: 6,
-  shadowOffset: { width: 0, height: 3 },
-  elevation: 3,
+  alignSelf:"flex-start"
+ 
 },
 backIcon: {
-  fontSize: 22,
+  fontSize: 12,
   color: "#fff", // adjust if dark mode
 },
 

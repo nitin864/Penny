@@ -14,7 +14,7 @@ const Buttton = ({
    if(loading){
     return(
         <View style={[styles.button , style , {backgroundColor : "transparent"}]}>
-            ///loading component here
+             
             <Loading/>
         </View>
     )

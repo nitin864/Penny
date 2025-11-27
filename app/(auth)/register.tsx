@@ -20,7 +20,7 @@ const Register = () => {
   const router = useRouter();
   const handleSubmit =  async () => {
     if(!emailRef.current || !passwordRef.current || !nameRef.current){
-        Alert.alert('Sign up ', "Please Fill Login details")
+        Alert.alert('Sign up ', "Please Fill Sign up details")
         return;
     }
     console.log('name: ' , nameRef.current);

@@ -24,7 +24,7 @@ const Welcome = () => {
           </TouchableOpacity>
 
           <Animated.Image
-            entering={FadeIn.duration(2000)}
+            entering={FadeIn.duration(1000)}
             source={require("../../assets/images/money.gif")}
             style={styles.welcomeImage}
             resizeMode="contain"

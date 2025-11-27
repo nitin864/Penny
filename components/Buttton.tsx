@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     borderCurve : "continuous",
     justifyContent: "center",
     alignItems: "center",
-    height: 40
+    height: 48
   }
 
 })

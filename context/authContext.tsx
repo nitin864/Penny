@@ -47,6 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       return { success: true };
     } catch (error: any) {
       const msg = error?.message ?? "Login failed";
+       
       return { success: false, msg };
     }
   };

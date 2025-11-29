@@ -1,11 +1,13 @@
 import { auth, firestore } from "@/config/firebase";
 import { AuthContextType, UserType } from "@/types";
+import { useRouter } from "expo-router";
 import {
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -13,6 +15,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<UserType | null>(null);
+  const router = useRouter();
+
+  useEffect(()=> {
+    const unsub = onAuthStateChanged(auth , (firebaseUser) => {
+
+      console.log("firebase user: ", firebaseUser)
+
+      if(firebaseUser){
+        setUser({
+          uid: firebaseUser?.uid,
+          email: firebaseUser?.email,
+          name: firebaseUser?.displayName
+        });
+        router.replace("/(tabs)");
+      }else{
+        //no user
+        setUser(null);
+        router.replace("/(auth)/welcome");
+      }
+    });
+    
+    return () => unsub();
+
+  }, []);
+
 
   const login = async (email: string, password: string) => {
     try {
@@ -40,8 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         email,
         uid,
       });
-
-      // set minimal local user state
+ 
       setUser({
         uid,
         email,
@@ -76,7 +102,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  // cast to AuthContextType to satisfy TS if your interface differs slightly
+  
   const contextValue = {
     user,
     setUser,

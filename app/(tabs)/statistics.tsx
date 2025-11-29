@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native'
 const Statistics = () => {
   return (
     <View>
-      <Text>S</Text>
+      <Text>Statistics</Text>
     </View>
   )
 }

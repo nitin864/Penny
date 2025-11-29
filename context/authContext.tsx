@@ -27,6 +27,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           email: firebaseUser?.email,
           name: firebaseUser?.displayName,
         });
+        updateUserData(firebaseUser.uid)
         router.replace("/(tabs)");
       } else {
         //no user
@@ -77,7 +78,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       return { success: true };
     } catch (error: any) {
-      const msg = error?.message ?? "Registration failed";
+      let msg = error?.message ?? "Registration failed";
+      if (msg.includes("auth/email-already-in-use")) msg = "Email already in use";
+      if (msg.includes("auth/invalid-email")) msg = "Invalid email";
       return { success: false, msg };
     }
   };

@@ -1,4 +1,3 @@
-import React, { createContext, useContext, useState } from "react";
 import { auth, firestore } from "@/config/firebase";
 import { AuthContextType, UserType } from "@/types";
 import {
@@ -6,13 +5,13 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import React, { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export const Authprovider: React.FC<{ children: React.ReactNode }> = ({
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  // allow null initially
   const [user, setUser] = useState<UserType | null>(null);
 
   const login = async (email: string, password: string) => {
@@ -42,7 +41,7 @@ export const Authprovider: React.FC<{ children: React.ReactNode }> = ({
         uid,
       });
 
-      // set local user state with minimal info
+      // set minimal local user state
       setUser({
         uid,
         email,
@@ -67,17 +66,17 @@ export const Authprovider: React.FC<{ children: React.ReactNode }> = ({
         const userData: UserType = {
           uid: data?.uid ?? uid,
           email: data?.email ?? null,
-          name: data?.name ?? null, // fixed: was using image earlier
+          name: data?.name ?? null,
           image: data?.image ?? null,
         };
         setUser(userData);
       }
     } catch (error: any) {
-      console.log("error: ", error);
+      console.log("error:", error);
     }
   };
 
-  // keep contextValue minimal and cast to AuthContextType if your type is stricter
+  // cast to AuthContextType to satisfy TS if your interface differs slightly
   const contextValue = {
     user,
     setUser,
@@ -93,11 +92,10 @@ export const Authprovider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-// small, correct useAuth hook
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within Authprovider");
+    throw new Error("useAuth must be used within AuthProvider");
   }
   return context;
 };

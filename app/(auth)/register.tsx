@@ -78,7 +78,7 @@ const Register = () => {
           <Input
             placeholder="Enter your password"
             secureTextEntry
-            icon={
+            icon={ 
               <Icons.Lock
                 size={verticalScale(26)}
                 color="white"

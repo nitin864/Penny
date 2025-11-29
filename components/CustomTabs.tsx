@@ -1,13 +1,14 @@
-import { colors } from '@/constants/theme';
+import { colors, spacingX, spacingY } from '@/constants/theme';
+import { verticalScale } from '@/utils/styling';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Text } from '@react-navigation/elements';
-import { TouchableOpacity, View } from 'react-native';
+import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 export default function   CustomTabs ({ state, descriptors, navigation }: BottomTabBarProps) {
  
 
   return (
-    <View style={{ flexDirection: 'row' , width: "100%", height: 100}}>
+    <View style={styles.tabBar}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label: any =
@@ -41,14 +42,15 @@ export default function   CustomTabs ({ state, descriptors, navigation }: Bottom
         return (
           <TouchableOpacity
             ///href={buildHref(route.name, route.params)}
+            key={route.name}
             accessibilityState={isFocused ? { selected: true } : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}
             testID={options.tabBarButtonTestID}
             onPress={onPress}
             onLongPress={onLongPress}
-            style={{ flex: 1 }}
+            style={styles.tabBarItems}
           >
-            <Text style={{ color: isFocused ? colors.primary : colors.neutral800 }}>
+            <Text style={{ color: isFocused ? colors.primary : colors.white }}>
               {label}
             </Text>
           </TouchableOpacity>
@@ -57,3 +59,24 @@ export default function   CustomTabs ({ state, descriptors, navigation }: Bottom
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBar: {
+    flexDirection: 'row',
+    backgroundColor: colors.neutral800,
+    width: "100%",
+    justifyContent: "space-between",
+    height: Platform.OS === "ios" ? verticalScale(73) : verticalScale(55),
+    alignItems: "center",
+    borderTopColor: colors.neutral700,
+    borderTopWidth: 1,
+    paddingHorizontal: spacingX._20,
+  },
+
+  tabBarItems: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: spacingY._10,  
+  },
+});

@@ -17,37 +17,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [user, setUser] = useState<UserType | null>(null);
   const router = useRouter();
 
-  useEffect(()=> {
-    const unsub = onAuthStateChanged(auth , (firebaseUser) => {
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (firebaseUser) => {
+      console.log("firebase user: ", firebaseUser);
 
-      console.log("firebase user: ", firebaseUser)
-
-      if(firebaseUser){
+      if (firebaseUser) {
         setUser({
           uid: firebaseUser?.uid,
           email: firebaseUser?.email,
-          name: firebaseUser?.displayName
+          name: firebaseUser?.displayName,
         });
         router.replace("/(tabs)");
-      }else{
+      } else {
         //no user
         setUser(null);
         router.replace("/(auth)/welcome");
       }
     });
-    
+
     return () => unsub();
-
   }, []);
-
 
   const login = async (email: string, password: string) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       return { success: true };
     } catch (error: any) {
-      const msg = error?.message ?? "Login failed";
-       
+      let msg = error?.message ?? "Login failed";
+      if (msg.includes("auth/invalid-credential")) msg = "Wrong credentials";
+      if (msg.includes("auth/invalid-email")) msg = "Invalid email";
+
       return { success: false, msg };
     }
   };
@@ -68,7 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         email,
         uid,
       });
- 
+
       setUser({
         uid,
         email,
@@ -103,7 +102,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  
   const contextValue = {
     user,
     setUser,
@@ -113,9 +111,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   } as unknown as AuthContextType;
 
   return (
-    <AuthContext.Provider value={contextValue}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
 

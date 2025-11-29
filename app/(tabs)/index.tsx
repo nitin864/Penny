@@ -1,13 +1,13 @@
 import Buttton from '@/components/Buttton'
 import Typo from '@/components/Typo'
 import { auth } from '@/config/firebase'
-import { colors } from '@/constants/theme'
+import { colors, radius } from '@/constants/theme'
 import { signOut } from 'firebase/auth'
 import React from 'react'
 import { FlatList, Pressable, SafeAreaView, StatusBar, StyleSheet, Text, View } from 'react-native'
 
-// Example homepage for a finance app. Drop this file into your screens folder and adjust imports
-// Uses your existing Buttton and Typo components and your colors theme. Small, self-contained UI.
+// Dark, refined finance home screen using neutral900 background and translucent cards
+// Drop into screens folder. Adjust icons/animations as needed.
 
 const transactions = [
   { id: '1', title: 'Grocery Store', amount: -129.45, date: 'Nov 28' },
@@ -27,6 +27,7 @@ const BalanceCard = ({ balance }: { balance: number }) => (
     <View>
       <Typo style={styles.cardTitle}>Total Balance</Typo>
       <Typo style={styles.balanceAmount}>₹{balance.toFixed(2)}</Typo>
+      <Typo style={styles.smallNote}>Available balance across accounts</Typo>
     </View>
     <Buttton onPress={() => {}} style={styles.cardBtn}>
       <Typo style={styles.cardBtnText}>Add</Typo>
@@ -62,7 +63,7 @@ export default function Home() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.neutral100} />
+      <StatusBar barStyle="light-content" backgroundColor={colors.neutral900} />
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
@@ -90,7 +91,7 @@ export default function Home() {
         <View style={styles.chartCard}>
           <Typo style={styles.sectionTitle}>Spending (7d)</Typo>
           <View style={styles.chartPlaceholder}>
-            <Text>— chart goes here —</Text>
+            <Text style={{color: colors.textLighter}}>— chart goes here —</Text>
           </View>
         </View>
 
@@ -111,10 +112,10 @@ export default function Home() {
 
         {/* Bottom navigation (simple) */}
         <View style={styles.bottomNav}>
-          <Typo>Home</Typo>
-          <Typo>Accounts</Typo>
-          <Typo>Cards</Typo>
-          <Typo>Profile</Typo>
+          <Typo style={styles.navItem}>Home</Typo>
+          <Typo style={styles.navItem}>Accounts</Typo>
+          <Typo style={styles.navItem}>Cards</Typo>
+          <Typo style={styles.navItem}>Profile</Typo>
         </View>
       </View>
     </SafeAreaView>
@@ -122,7 +123,7 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: colors.neutral100 },
+  safe: { flex: 1, backgroundColor: colors.neutral900 },
   container: { flex: 1, padding: 16 },
   header: {
     flexDirection: 'row',
@@ -130,58 +131,60 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
-  greeting: { fontSize: 18, fontWeight: '700' },
-  sub: { fontSize: 13, color: colors.neutral500, marginTop: 2 },
+  greeting: { fontSize: 20, fontWeight: '800', color: colors.white },
+  sub: { fontSize: 13, color: colors.textLighter, marginTop: 4 },
   logoutWrap: { padding: 8 },
   logoutText: { color: colors.primary, fontWeight: '600' },
 
   balanceCard: {
-    backgroundColor: colors.white,
-    borderRadius: 12,
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    borderRadius: radius._12,
     padding: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 2,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.04)',
   },
-  cardTitle: { color: colors.neutral500, fontSize: 13 },
-  balanceAmount: { fontSize: 22, fontWeight: '800', marginTop: 6 },
-  cardBtn: { backgroundColor: colors.primary, paddingVertical: 8, paddingHorizontal: 12, borderRadius: 10 },
-  cardBtnText: { color: colors.white, fontWeight: '700' },
+  cardTitle: { color: colors.textLighter, fontSize: 13 },
+  balanceAmount: { fontSize: 26, fontWeight: '900', marginTop: 6, color: colors.white },
+  smallNote: { color: colors.textLighter, marginTop: 6, fontSize: 12 },
+  cardBtn: { backgroundColor: colors.primary, paddingVertical: 10, paddingHorizontal: 14, borderRadius: radius._10 },
+  cardBtnText: { color: colors.black, fontWeight: '800' },
 
   actionsRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 },
   actionBtn: {
     flex: 1,
     marginHorizontal: 4,
     paddingVertical: 12,
-    borderRadius: 10,
-    backgroundColor: colors.white,
+    borderRadius: radius._10,
+    backgroundColor: 'rgba(255,255,255,0.03)',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.02)'
   },
-  actionLabel: { fontWeight: '600' },
+  actionLabel: { fontWeight: '700', color: colors.textLighter },
 
-  chartCard: { backgroundColor: colors.white, borderRadius: 12, padding: 12, marginBottom: 16 },
-  chartPlaceholder: { height: 80, justifyContent: 'center', alignItems: 'center' },
+  chartCard: { backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: radius._12, padding: 12, marginBottom: 16, borderWidth: 1, borderColor: 'rgba(255,255,255,0.02)' },
+  chartPlaceholder: { height: 90, justifyContent: 'center', alignItems: 'center', borderRadius: 8 },
 
-  listCard: { flex: 1, backgroundColor: colors.white, borderRadius: 12, padding: 12 },
+  listCard: { flex: 1, backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: radius._12, padding: 12, marginBottom: 12, borderWidth: 1, borderColor: 'rgba(255,255,255,0.02)' },
   listHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-  sectionTitle: { fontWeight: '700' },
-  viewAll: { color: colors.primary, fontSize: 13 },
+  sectionTitle: { fontWeight: '800', color: colors.white },
+  viewAll: { color: colors.primaryLight, fontSize: 13 },
 
-  txRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8 },
+  txRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10 },
   txLeft: { flexDirection: 'row', alignItems: 'center' },
-  txAvatar: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.neutral100, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
-  txAvatarText: { fontWeight: '700' },
-  txTitle: { fontWeight: '600' },
-  txDate: { color: colors.neutral500, fontSize: 12 },
-  txAmount: { fontWeight: '700' },
+  txAvatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(255,255,255,0.02)', justifyContent: 'center', alignItems: 'center', marginRight: 12, borderWidth: 1, borderColor: 'rgba(255,255,255,0.02)' },
+  txAvatarText: { fontWeight: '800', color: colors.textLighter },
+  txTitle: { fontWeight: '700', color: colors.white },
+  txDate: { color: colors.textLighter, fontSize: 12 },
+  txAmount: { fontWeight: '800' },
   negative: { color: colors.rose },
   positive: { color: colors.green },
-  sep: { height: 1, backgroundColor: colors.neutral300, marginVertical: 4 },
+  sep: { height: 1, backgroundColor: 'rgba(255,255,255,0.02)', marginVertical: 6 },
 
-  bottomNav: { flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 12, marginTop: 12 },
+  bottomNav: { flexDirection: 'row', justifyContent: 'space-around', paddingVertical: 12, marginTop: 8, borderTopWidth: 1, borderColor: 'rgba(255,255,255,0.02)' },
+  navItem: { color: colors.textLighter, fontWeight: '700' }
 })

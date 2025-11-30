@@ -9,7 +9,7 @@ import { verticalScale } from "@/utils/styling";
 import { Image } from "expo-image";
 import * as Icons from 'phosphor-react-native';
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 const Profile = () => {
   const { user } = useAuth();
@@ -84,6 +84,43 @@ const Profile = () => {
             {user?.email}
           </Typo>
         </View>
+        <View style={styles.accountOptions}>
+  {accountOptions.map((item, index) => {
+    return (
+      <View style={styles.listItem} key={index}>
+        <TouchableOpacity style={styles.flexRow}>
+          
+          {/* icon */}
+          <View
+            style={[
+              styles.listIcon,
+              {
+                backgroundColor: item?.bgColor,
+              },
+            ]}
+          >
+            {item.icon && item.icon}
+          </View>
+
+          {/* title */}
+          <Typo size={16} style={{ flex: 1 }} fontWeight="500">
+            {item.title}
+          </Typo>
+
+          {/* arrow */}
+          <Icons.CaretRight
+            size={verticalScale(20)}
+            weight="bold"
+            color={colors.white}
+          />
+
+        </TouchableOpacity>
+      </View>
+    );
+  })}
+</View>
+
+
       </View>
     </ScreenWrapper>
   );

@@ -6,7 +6,13 @@ import { StyleSheet } from 'react-native';
 
 const StackLayout = () => {
   return (
-   <Stack screenOptions={{ headerShown: false}}></Stack>
+   <Stack screenOptions={{ headerShown: false}}>
+    <Stack.Screen name='(modals)/profileModal' 
+    options={{
+      presentation: "modal"
+    }}
+    />
+   </Stack>
   )
 };
 

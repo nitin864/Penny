@@ -34,7 +34,7 @@ const Welcome = () => {
         {/* footer area */}
         <View style={styles.footer}>
           <Animated.View
-            entering={FadeInDown.duration(1000).springify().damping(12)}
+            entering={FadeInDown.duration(1000)}
             style={{ alignItems: "center" }}
           >
             <Typo size={30} fontWeight={"800"}>
@@ -46,7 +46,7 @@ const Welcome = () => {
           </Animated.View>
 
           <Animated.View
-            entering={FadeInDown.duration(1000).delay(100).springify().damping(12)}
+            entering={FadeInDown.duration(1000).delay(100)}
             style={{ alignItems: "center", gap: 2 }}
           >
             <Typo size={17} color={colors.textLight}>
@@ -58,7 +58,7 @@ const Welcome = () => {
           </Animated.View>
 
           <Animated.View
-            entering={FadeInDown.duration(1000).delay(200).springify().damping(12)}
+            entering={FadeInDown.duration(1000).delay(200)}
             style={styles.buttonContainer}
           >
             {/* main CTA button */}

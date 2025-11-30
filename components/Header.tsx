@@ -6,24 +6,28 @@ import Typo from './Typo'
 const Header = ({ title = "", leftIcon, style }: HeaderProps) => {
   return (
     <View style={[styles.container, style]}>
-      
-      {leftIcon && (
-        <View style={styles.leftIcon}>
-          {leftIcon}
-        </View>
-      )}
 
-      {title !== "" && (
-        <Typo size={22}
-        fontWeight='600'
-        style={{
-          textAlign: "center",
-          width: leftIcon? "82" : "100%"
-        }}>
-          {title}
-        </Typo>
-      )}
+      {/* LEFT */}
+      <View style={styles.side}>
+        {leftIcon}
+      </View>
 
+      {/* CENTER TITLE */}
+      <View style={styles.center}>
+        {title !== "" && (
+          <Typo
+            size={22}
+            fontWeight="600"
+            numberOfLines={1}
+            style={styles.title}
+          >
+            {title}
+          </Typo>
+        )}
+      </View>
+
+      {/* RIGHT (empty placeholder keeps center PERFECT) */}
+      <View style={styles.side} />
     </View>
   )
 }
@@ -32,13 +36,27 @@ export default Header
 
 const styles = StyleSheet.create({
   container: {
-    width:"100%",
+    width: "100%",
     flexDirection: "row",
     alignItems: "center",
+    paddingVertical: 10,
   },
 
-  leftIcon: {
-    marginRight: 10,
-    alignSelf: "flex-start"
+  // Fixed width areas on left + right
+  side: {
+    width: 40,
+    alignItems: "flex-start",
+    justifyContent: "center",
+  },
+
+  center: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 5,
+  },
+
+  title: {
+    textAlign: "center",
   },
 })

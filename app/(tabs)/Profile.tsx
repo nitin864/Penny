@@ -1,81 +1,100 @@
 import Header from "@/components/Header";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import Typo from "@/components/Typo";
+import { auth } from "@/config/firebase";
 import { colors, radius, spacingX, spacingY } from "@/constants/theme";
 import { useAuth } from "@/context/authContext";
 import { getProfileImage } from "@/services/imageServices";
 import { accountOptionType } from "@/types";
 import { verticalScale } from "@/utils/styling";
 import { Image } from "expo-image";
-import * as Icons from 'phosphor-react-native';
+import { useRouter } from "expo-router";
+import { signOut } from "firebase/auth";
+import * as Icons from "phosphor-react-native";
 import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 
 const Profile = () => {
   const { user } = useAuth();
-    const accountOptions: accountOptionType[] = [
+  const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.warn("Logout error:", err);
+    }
+  };
+
+  const showLogoutAlert = () => {
+    Alert.alert("Confirm", "Are you sure you want to logout?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("canceled Logout function"),
+        style: "cancel",
+      },
+      {
+        text: "Logout",
+        onPress: () => handleLogout(),
+        style: "destructive",
+      },
+    ]);
+  };
+
+  const handlePress = (item: accountOptionType) => {
+    if (item.title === "Logout") {
+      showLogoutAlert();
+      return;
+    }
+
+    if (item.routeName) {
+      router.push(item.routeName);
+      return;
+    }
+
+     
+    console.log("Pressed:", item.title);
+  };
+
+  const accountOptions: accountOptionType[] = [
     {
-      title: "Edit Profile",
-      icon: (
-        <Icons.User
-          size={26}
-          color={colors.white}
-          weight="fill"
-        />
-      ),
+      title: "Edit Profile", 
+      icon: <Icons.User size={26} color={colors.white} weight="fill" />,
       bgColor: "#6366f1",
-      routeName: '/(modals)/profileModal',
-    },
-        {
+      routeName: "/(modals)/profileModal",    },
+    {
       title: "Settings",
-      icon: (
-        <Icons.Gear
-          size={26}
-          color={colors.white}
-          weight="fill"
-        />
-      ),
+      icon: <Icons.Gear size={26} color={colors.white} weight="fill" />,
       bgColor: "#059669",
-     // routeName: '/(modals)/profileModal',
     },
-        {
+    {
       title: "Privacy Policy",
-      icon: (
-        <Icons.Lock
-          size={26}
-          color={colors.white}
-          weight="fill"
-        />
-      ),
+      icon: <Icons.Lock size={26} color={colors.white} weight="fill" />,
       bgColor: colors.neutral600,
-      //routeName: '/(modals)/profileModal',
     },
-        {
+    {
       title: "Logout",
-      icon: (
-        <Icons.Power
-          size={26}
-          color={colors.white}
-          weight="fill"
-        />
-      ),
+      icon: <Icons.Power size={26} color={colors.white} weight="fill" />,
       bgColor: "#e11d48",
-      //routeName: '/(modals)/profileModal',
     },
   ];
+
   return (
     <ScreenWrapper>
       <View style={styles.container}>
         <Header title="Profile" style={{ marginVertical: spacingY._10 }} />
+
+        {/* userimage */}
         <View style={styles.userInfo}>
-          {/* userimage */}
-          <Image
-            style={styles.avatar}
-            source={getProfileImage(user?.image)}
-            contentFit="cover"
-            transition={100}
-          />
+          <View style={styles.avatarContainer}>
+            <Image
+              style={styles.avatar}
+              source={getProfileImage(user?.image)}
+              contentFit="cover"
+              transition={100}
+            />
+          </View>
         </View>
+
         <View style={styles.nameContainer}>
           <Typo size={24} fontWeight="600" color={colors.neutral100}>
             {user?.name}
@@ -84,43 +103,43 @@ const Profile = () => {
             {user?.email}
           </Typo>
         </View>
+
         <View style={styles.accountOptions}>
-  {accountOptions.map((item, index) => {
-    return (
-      <View style={styles.listItem} key={index}>
-        <TouchableOpacity style={styles.flexRow}>
-          
-          {/* icon */}
-          <View
-            style={[
-              styles.listIcon,
-              {
-                backgroundColor: item?.bgColor,
-              },
-            ]}
-          >
-            {item.icon && item.icon}
-          </View>
+          {accountOptions.map((item, index) => {
+            return (
+              <View style={styles.listItem} key={index}>
+                <TouchableOpacity
+                  style={styles.flexRow}
+                  onPress={() => handlePress(item)}         
+                >
+                  {/* icon */}
+                  <View
+                    style={[
+                      styles.listIcon,
+                      {
+                        backgroundColor: item?.bgColor,
+                      },
+                    ]}
+                  >
+                    {item.icon}
+                  </View>
 
-          {/* title */}
-          <Typo size={16} style={{ flex: 1 }} fontWeight="500">
-            {item.title}
-          </Typo>
+                  {/* title */}
+                  <Typo size={16} style={{ flex: 1 }} fontWeight="500">
+                    {item.title}
+                  </Typo>
 
-          {/* arrow */}
-          <Icons.CaretRight
-            size={verticalScale(20)}
-            weight="bold"
-            color={colors.white}
-          />
-
-        </TouchableOpacity>
-      </View>
-    );
-  })}
-</View>
-
-
+                  {/* arrow */}
+                  <Icons.CaretRight
+                    size={verticalScale(20)}
+                    weight="bold"
+                    color={colors.white}
+                  />
+                </TouchableOpacity>
+              </View>
+            );
+          })}
+        </View>
       </View>
     </ScreenWrapper>
   );
@@ -138,12 +157,17 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(30),
     alignItems: "center",
     gap: spacingY._15,
-    marginBottom: 25
+    marginBottom: 25,
   },
 
   avatarContainer: {
-    position: "relative",
-    alignSelf: "center",
+    height: verticalScale(150),
+    width: verticalScale(150),
+    borderRadius: 200,
+    borderWidth: 4,
+    borderColor: "#3b82f6", // blue border
+    alignItems: "center",
+    justifyContent: "center",
   },
 
   avatar: {
@@ -152,8 +176,6 @@ const styles = StyleSheet.create({
     height: verticalScale(135),
     width: verticalScale(135),
     borderRadius: 200,
-    // overflow: "hidden",
-    // position: "relative",
   },
 
   editIcon: {

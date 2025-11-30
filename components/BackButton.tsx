@@ -29,8 +29,8 @@ backButton: {
   backgroundColor: "rgba(255,255,255,0.15)", // subtle frosted circle
   justifyContent: "center",
   alignItems: "center",
-  alignSelf:"flex-start"
- 
+  alignSelf:"flex-start",
+  
 },
 backIcon: {
   fontSize: 12,

@@ -1,10 +1,42 @@
 import { colors, spacingX, spacingY } from '@/constants/theme';
 import { verticalScale } from '@/utils/styling';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
-import { Text } from '@react-navigation/elements';
+ 
+import * as Icons from 'phosphor-react-native';
 import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 export default function   CustomTabs ({ state, descriptors, navigation }: BottomTabBarProps) {
+
+  const tabbarIcons : any = {
+    index: (isFocused: Boolean)=>(
+      <Icons.House
+      size={verticalScale(30)}
+      weight={isFocused? "fill": "regular"}
+      color={isFocused? colors.primary: colors.neutral400}
+      />    
+    ),
+      statistics: (isFocused: Boolean)=>(
+      <Icons.ChartBar
+      size={verticalScale(30)}
+      weight={isFocused? "fill": "regular"}
+      color={isFocused? colors.primary: colors.neutral400}
+      />    
+    ),
+      Wallet: (isFocused: Boolean)=>(
+      <Icons.Wallet
+      size={verticalScale(30)}
+      weight={isFocused? "fill": "regular"}
+      color={isFocused? colors.primary: colors.neutral400}
+      />    
+    ),
+      Profile: (isFocused: Boolean)=>(
+      <Icons.User
+      size={verticalScale(30)}
+      weight={isFocused? "fill": "regular"}
+      color={isFocused? colors.primary: colors.neutral400}
+      />    
+    ), 
+  }
  
 
   return (
@@ -50,9 +82,9 @@ export default function   CustomTabs ({ state, descriptors, navigation }: Bottom
             onLongPress={onLongPress}
             style={styles.tabBarItems}
           >
-            <Text style={{ color: isFocused ? colors.primary : colors.white }}>
-              {label}
-            </Text>
+          {
+            tabbarIcons[route.name] && tabbarIcons[route.name](isFocused)
+          }
           </TouchableOpacity>
         );
       })}

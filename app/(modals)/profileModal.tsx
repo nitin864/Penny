@@ -5,26 +5,60 @@ import Input from "@/components/Input";
 import ModalWrapper from "@/components/ModalWrapper";
 import Typo from "@/components/Typo";
 import { colors, spacingX, spacingY } from "@/constants/theme";
+import { useAuth } from "@/context/authContext";
 import { getProfileImage } from "@/services/imageServices";
+import { updateUser } from "@/services/userService";
 import { UserDataType } from "@/types";
 import { scale, verticalScale } from "@/utils/styling";
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import * as Icons from "phosphor-react-native";
-import React, { useState } from "react";
-import { Alert, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-const profileModal = () => {
-
-  const [userData , setUserData] = useState<UserDataType>({
+const ProfileModal = () => {
+  const { user, updateUserData } = useAuth();
+  const [userData, setUserData] = useState<UserDataType>({
     name: "",
     image: null,
   });
 
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  // run only when `user` changes
+  useEffect(() => {
+    setUserData({
+      name: user?.name || "",
+      image: user?.image ?? null,
+    });
+  }, [user]);
 
   const onSubmit = async () => {
-    Alert.alert("Update", 'Profile Updated')
-  }
+    let { name, image } = userData;
+    if (!name.trim()) {
+      Alert.alert("User", "Please fill all fields");
+      return;
+    }
+
+    setLoading(true);
+    const res = await updateUser(user?.uid as string, userData);
+    setLoading(false);
+
+    if (res.success) {
+      // refresh user data in context (if this is what updateUserData does)
+      updateUserData(user?.uid as string);
+      router.back();
+    } else {
+      Alert.alert("User", res.msg);
+    }
+  };
 
   return (
     <ModalWrapper>
@@ -50,29 +84,32 @@ const profileModal = () => {
               />
             </TouchableOpacity>
           </View>
-          
+
           <View style={styles.inputContainer}>
             <Typo color={colors.neutral200}>Name</Typo>
             <Input
-             placeholder="Name"
-             value={userData.name}
-             onChangeText={(value) => setUserData({...userData, name: value})}
-            /> 
+              placeholder="Name"
+              value={userData.name}
+              onChangeText={(value) =>
+                setUserData({ ...userData, name: value })
+              }
+            />
           </View>
-
         </ScrollView>
       </View>
 
-      <View style={styles.footer} >
-        <Buttton onPress={onSubmit} loading={loading} style={{flex: 1}}>
-          <Typo color={colors.black} fontWeight="700">Update</Typo>
+      <View style={styles.footer}>
+        <Buttton onPress={onSubmit} loading={loading} style={{ flex: 1 }}>
+          <Typo color={colors.black} fontWeight="700">
+            Update
+          </Typo>
         </Buttton>
       </View>
     </ModalWrapper>
   );
 };
 
-export default profileModal;
+export default ProfileModal;
 
 const styles = StyleSheet.create({
   container: {
@@ -115,25 +152,24 @@ const styles = StyleSheet.create({
   },
 
   editIcon: {
-  position: "absolute",
-  bottom: spacingY._5,
-  right: spacingY._7,
+    position: "absolute",
+    bottom: spacingY._5,
+    right: spacingY._7,
 
-  height: verticalScale(40),
-  width: verticalScale(40),
-  borderRadius: 100,
+    height: verticalScale(40),
+    width: verticalScale(40),
+    borderRadius: 100,
 
-  backgroundColor: colors.neutral100,
-  alignItems: "center",
-  justifyContent: "center",
+    backgroundColor: colors.neutral100,
+    alignItems: "center",
+    justifyContent: "center",
 
-  shadowColor: colors.black,
-  shadowOffset: { width: 0, height: 0 },
-  shadowOpacity: 0.25,
-  shadowRadius: 10,
-  elevation: 4,
-},
-
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.25,
+    shadowRadius: 10,
+    elevation: 4,
+  },
 
   inputContainer: {
     gap: spacingY._10,

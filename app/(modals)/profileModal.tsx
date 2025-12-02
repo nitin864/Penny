@@ -11,6 +11,7 @@ import { updateUser } from "@/services/userService";
 import { UserDataType } from "@/types";
 import { scale, verticalScale } from "@/utils/styling";
 import { Image } from "expo-image";
+import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from "expo-router";
 import * as Icons from "phosphor-react-native";
 import React, { useEffect, useState } from "react";
@@ -39,6 +40,29 @@ const ProfileModal = () => {
       image: user?.image ?? null,
     });
   }, [user]);
+   
+  const onpickImage = async () => {
+ 
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permissionResult.granted) {
+      Alert.alert('Permission required', 'Permission to access the media library is required.');
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.5,
+    });
+
+
+    if (!result.canceled) {
+      setUserData({...userData, image: result.assets[0]});
+    }
+  };
+
 
   const onSubmit = async () => {
     let { name, image } = userData;
@@ -76,7 +100,7 @@ const ProfileModal = () => {
               contentFit="cover"
               transition={100}
             />
-            <TouchableOpacity style={styles.editIcon}>
+            <TouchableOpacity  onPress={onpickImage} style={styles.editIcon}>
               <Icons.Pencil
                 size={verticalScale(20)}
                 color={colors.neutral800}

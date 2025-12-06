@@ -13,10 +13,13 @@ import { signOut } from "firebase/auth";
 import * as Icons from "phosphor-react-native";
 import React from "react";
 import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Profile = () => {
   const { user } = useAuth();
   const router = useRouter();
+  const insets = useSafeAreaInsets();  
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -51,16 +54,16 @@ const Profile = () => {
       return;
     }
 
-     
     console.log("Pressed:", item.title);
   };
 
   const accountOptions: accountOptionType[] = [
     {
-      title: "Edit Profile", 
+      title: "Edit Profile",
       icon: <Icons.User size={26} color={colors.white} weight="fill" />,
       bgColor: "#6366f1",
-      routeName: "/(modals)/profileModal",    },
+      routeName: "/(modals)/profileModal",
+    },
     {
       title: "Settings",
       icon: <Icons.Gear size={26} color={colors.white} weight="fill" />,
@@ -80,10 +83,17 @@ const Profile = () => {
 
   return (
     <ScreenWrapper>
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          {
+            paddingBottom: insets.bottom + verticalScale(28), 
+          },
+        ]}
+      >
         <Header title="Profile" style={{ marginVertical: spacingY._10 }} />
 
-        {/* userimage */}
+        {/* user image */}
         <View style={styles.userInfo}>
           <View style={styles.avatarContainer}>
             <Image
@@ -110,7 +120,7 @@ const Profile = () => {
               <View style={styles.listItem} key={index}>
                 <TouchableOpacity
                   style={styles.flexRow}
-                  onPress={() => handlePress(item)}         
+                  onPress={() => handlePress(item)}
                 >
                   {/* icon */}
                   <View
@@ -139,6 +149,19 @@ const Profile = () => {
               </View>
             );
           })}
+        </View>
+
+ 
+        <View style={styles.footer}>
+          <Typo
+            size={12}
+            fontWeight="700"
+            color={colors.neutral400}
+            style={styles.footerTitle}
+          >
+            {`Developed with 💙 in INDIA by Nitin!`}
+          </Typo>
+ 
         </View>
       </View>
     </ScreenWrapper>
@@ -216,5 +239,23 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacingX._10,
+  },
+
+  /* --- footer styles --- */
+  footer: {
+    marginTop: spacingY._35,
+    alignItems: "center",
+    marginBottom: verticalScale(4),
+  },
+
+  footerTitle: {
+    textAlign: "center",
+    lineHeight: verticalScale(32),
+  },
+
+  footerSub: {
+    marginTop: spacingY._10,
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

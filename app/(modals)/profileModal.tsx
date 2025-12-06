@@ -33,7 +33,7 @@ const ProfileModal = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  // run only when `user` changes
+  
   useEffect(() => {
     setUserData({
       name: user?.name || "",

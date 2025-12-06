@@ -1,23 +1,24 @@
 import BackButton from "@/components/BackButton";
 import Buttton from "@/components/Buttton";
 import Header from "@/components/Header";
+import ImageUpload from "@/components/ImageUpload";
 import Input from "@/components/Input";
 import ModalWrapper from "@/components/ModalWrapper";
 import Typo from "@/components/Typo";
 import { colors, spacingX, spacingY } from "@/constants/theme";
 import { useAuth } from "@/context/authContext";
-import { updateUser } from "@/services/userService";
+import { createOrUpdateWallet } from "@/services/walletServices";
 import { WalletType } from "@/types";
 import { scale, verticalScale } from "@/utils/styling";
-import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-    Alert,
-    ScrollView,
-    StyleSheet,
-    View
+  Alert,
+  ScrollView,
+  StyleSheet,
+  View
 } from "react-native";
+ 
 
 const WalletModel = () => {
   const { user, updateUserData } = useAuth();
@@ -30,48 +31,36 @@ const WalletModel = () => {
   const router = useRouter();
  
    
-  const onpickImage = async () => {
  
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (!permissionResult.granted) {
-      Alert.alert('Permission required', 'Permission to access the media library is required.');
-      return;
-    }
-
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 0.5,
-    });
-
-
-    if (!result.canceled) {
-      ///setUserData({...userData, image: result.assets[0]});
-    }
-  };
 
 
   const onSubmit = async () => {
     let { name, image } = wallet;
-    if (!name.trim()) {
-      Alert.alert("User", "Please fill all fields");
+    if (!name.trim() || !image) {
+      Alert.alert("Wallet", "Please fill all fields");
       return;
     }
 
-    setLoading(true);
-    const res = await updateUser(user?.uid as string, wallet);
-    setLoading(false);
+    const data: WalletType = {
+      name,
+      image,
+      uid: user?.uid
+    };
 
+    //pending here: include wallet id if uploading
+
+    setLoading(true);
+    const res = await createOrUpdateWallet(data);
+    setLoading(false);
+     
     if (res.success) {
-      // refresh user data in context (if this is what updateUserData does)
-      updateUserData(user?.uid as string);
       router.back();
     } else {
-      Alert.alert("User", res.msg);
+      Alert.alert("Wallet", res.msg);
     }
   };
+
+
 
   return (
     <ModalWrapper>
@@ -96,7 +85,14 @@ const WalletModel = () => {
           </View>
             <View style={styles.inputContainer}>
             <Typo color={colors.neutral200}>Wallet Icon</Typo>
-            //here add a custom image picker for wallet icon
+             
+           <ImageUpload 
+             file={wallet.image} 
+             onSelect={file=> setWallet({...wallet, image: file})}
+             onClear={()=> setWallet({...wallet, image: null})} 
+             placeholder="Upload Icon"
+            />
+              
           </View>
         </ScrollView>
       </View>

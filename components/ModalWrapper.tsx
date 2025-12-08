@@ -2,8 +2,8 @@ import { colors, spacingY } from '@/constants/theme';
 import { ModalWrapperProps } from '@/types';
 import React from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
-
-
+ 
+ 
 const isAndroid = Platform.OS == "android";
  
 const ModalWrapper = ({
@@ -13,7 +13,7 @@ const ModalWrapper = ({
 }: ModalWrapperProps) => {
   return (
     <View style={[styles.container, { backgroundColor: bg }, style && style]}>
-      {children}
+     {children}
     </View>
   );
 };

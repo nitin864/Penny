@@ -18,17 +18,24 @@ const WalletListItem = ({
   index: number;
   router: Router;
 }) => {
+
+  const openWallet  = ()=> {
+        router.push({
+      pathname:"/(modals)/WalletModel",
+      params: {
+        id: item?.id,
+        name: item?.name,
+        image: item?.image
+      }
+    })
+  }
+
   return (
  
       <TouchableOpacity
         style={styles.container}
         activeOpacity={0.8}
-        onPress={() => {
-          // navigate to a detail route; adjust path if needed
-          if (router && typeof (router as any).push === "function") {
-            (router as any).push(`/wallet/${item.id}`);
-          }
-        }}
+        onPress={openWallet} 
       >
         <View style={styles.imageContainer}>
           <Image

@@ -207,6 +207,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     paddingHorizontal: spacingX._20,
+     marginTop: verticalScale(25),
   },
 
   subtitleRow: {

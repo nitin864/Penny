@@ -4,6 +4,7 @@ import { colors, spacingX, spacingY } from "@/constants/theme";
 import { useAuth } from "@/context/authContext";
 import { verticalScale } from "@/utils/styling";
 import { Image } from "expo-image";
+import * as Icons from "phosphor-react-native";
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 const index = () => {
@@ -29,8 +30,14 @@ const index = () => {
                 {user?.name}
               </Typo>
             </View>
-            <TouchableOpacity>
-                
+
+            
+            <TouchableOpacity style={styles.search}>
+              <Icons.MagnifyingGlassIcon
+                size={verticalScale(22)}
+                color={colors.neutral200}
+                weight="bold"
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -45,7 +52,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: spacingX._20,
-    marginTop: verticalScale(8),
+    marginTop: verticalScale(25),
   },
 
   header: {
@@ -59,6 +66,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.neutral700,
     padding: spacingX._10,
     borderRadius: 50,
+    marginLeft: "auto",
   },
 
   floatingButton: {
@@ -88,6 +96,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacingX._10,
+    width: "100%",
   },
 
   textContainer: {

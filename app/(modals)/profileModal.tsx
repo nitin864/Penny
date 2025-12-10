@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: spacingX._20,
     // paddingVertical: spacingY._30,
+     marginTop: verticalScale(25),
   },
 
   footer: {

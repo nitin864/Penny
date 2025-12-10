@@ -1,4 +1,6 @@
+import HomeCard from "@/components/HomeCard";
 import ModalWrapper from "@/components/ModalWrapper";
+import TransctionList from "@/components/TransctionList";
 import Typo from "@/components/Typo";
 import { colors, spacingX, spacingY } from "@/constants/theme";
 import { useAuth } from "@/context/authContext";
@@ -6,13 +8,15 @@ import { verticalScale } from "@/utils/styling";
 import { Image } from "expo-image";
 import * as Icons from "phosphor-react-native";
 import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-const index = () => {
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+
+const HomeScreen = () => {
   const { user } = useAuth();
 
   return (
     <ModalWrapper>
       <View style={styles.container}>
+        {/* Header */}
         <View style={styles.header}>
           <View style={styles.profileRow}>
             <Image
@@ -31,9 +35,8 @@ const index = () => {
               </Typo>
             </View>
 
-            
             <TouchableOpacity style={styles.search}>
-              <Icons.MagnifyingGlassIcon
+              <Icons.MagnifyingGlass
                 size={verticalScale(22)}
                 color={colors.neutral200}
                 weight="bold"
@@ -41,12 +44,26 @@ const index = () => {
             </TouchableOpacity>
           </View>
         </View>
+
+        {/* Content */}
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollViewContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <View>
+            <HomeCard />
+          </View>
+
+          <TransctionList/>
+
+        </ScrollView>
       </View>
     </ModalWrapper>
   );
 };
 
-export default index;
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -56,9 +73,6 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
     marginBottom: spacingY._10,
   },
 
@@ -78,11 +92,16 @@ const styles = StyleSheet.create({
     right: verticalScale(30),
   },
 
-  scrollViewStyle: {
+  scrollView: {
+    flex: 1,
+  },
+
+  scrollViewContent: {
     marginTop: spacingY._10,
     paddingBottom: verticalScale(100),
     gap: spacingY._25,
   },
+
   avatar: {
     alignSelf: "center",
     backgroundColor: colors.neutral300,
@@ -92,6 +111,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.primary,
   },
+
   profileRow: {
     flexDirection: "row",
     alignItems: "center",

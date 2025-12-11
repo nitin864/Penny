@@ -59,7 +59,7 @@ const HomeCard = () => {
                <Typo size={16} color={colors.neutral700} fontWeight='500'>Expense</Typo> 
             </View>
             <View style={{alignSelf: "center"}}>
-               <Typo color={colors.rose} fontWeight={"600"} size={17}>₹455</Typo> 
+               <Typo color={colors.rose} fontWeight={"600"} size={17}>₹123</Typo> 
             </View>
           </View>
          </View>

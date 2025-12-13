@@ -55,7 +55,7 @@ const HomeScreen = () => {
             <HomeCard />
           </View>
 
-          <TransctionList/>
+          <TransctionList title="Recent Transctions" data={[1,2,3,4]} loading={false} emptyListMessage="No Transctions added yet!"/>
 
         </ScrollView>
       </View>

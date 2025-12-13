@@ -87,8 +87,8 @@ src/
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/nitin864/expense-tracker-app.git
-cd expense-tracker-app
+git clone https://github.com/nitin864/Penny
+cd Penny
 ```
 
 ### 2️⃣ Install Dependencies

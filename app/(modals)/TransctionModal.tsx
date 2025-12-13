@@ -3,6 +3,7 @@ import Buttton from "@/components/Buttton";
 import { expenseCategories, transactionTypes } from "@/components/data";
 import Header from "@/components/Header";
 import ImageUpload from "@/components/ImageUpload";
+import Input from "@/components/Input";
 import ModalWrapper from "@/components/ModalWrapper";
 import Typo from "@/components/Typo";
 import { colors, radius, spacingX, spacingY } from "@/constants/theme";
@@ -18,6 +19,7 @@ import * as Icons from "phosphor-react-native";
 import React, { useState } from "react";
 import {
   Alert,
+  KeyboardAvoidingView,
   Platform,
   Pressable,
   ScrollView,
@@ -132,103 +134,76 @@ const TransctionModal = () => {
 
   return (
     <ModalWrapper>
-      <View style={styles.container}>
-        <Header
-          title={isEditMode ? "Update transctions" : "New transctions"}
-          leftIcon={<BackButton />}
-          style={{ marginBottom: spacingY._10 }}
-        />
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
+      >
+        <View style={styles.container}>
+          <Header
+            title={isEditMode ? "Update transctions" : "New transctions"}
+            leftIcon={<BackButton />}
+            style={{ marginBottom: spacingY._10 }}
+          />
 
-        <View style={styles.subtitleRow}>
-          <Typo size={13} color={colors.neutral400}>
-            {isEditMode
-              ? "Change transctions name or icon."
-              : "Create a transctions to track your money."}
-          </Typo>
+          <View style={styles.subtitleRow}>
+            <Typo size={13} color={colors.neutral400}>
+              {isEditMode
+                ? "Change transctions name or icon."
+                : "Create a transctions to track your money."}
+            </Typo>
 
-          {isEditMode && (
-            <View style={styles.editBadge}>
-              <Icons.PencilSimple
-                size={14}
-                color={colors.primary}
-                weight="bold"
-              />
-              <Typo size={12} color={colors.primary}>
-                Editing
-              </Typo>
-            </View>
-          )}
-        </View>
+            {isEditMode && (
+              <View style={styles.editBadge}>
+                <Icons.PencilSimple
+                  size={14}
+                  color={colors.primary}
+                  weight="bold"
+                />
+                <Typo size={12} color={colors.primary}>
+                  Editing
+                </Typo>
+              </View>
+            )}
+          </View>
 
-        <ScrollView
-          contentContainerStyle={styles.form}
-          bounces={false}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.formCard}>
-            {/*  Transction Type*/}
+          <ScrollView
+            contentContainerStyle={styles.form}
+            bounces={false}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          >
+            <View style={styles.formCard}>
+              {/*  Transction Type*/}
 
-            <View style={styles.inputContainer}>
-              <Typo color={colors.neutral200}>Type</Typo>
-
-              <Dropdown
-                style={styles.dropdownContainer}
-                activeColor={colors.neutral700}
-                selectedTextStyle={styles.dropdownSelectedText}
-                iconStyle={styles.dropdownIcon}
-                data={transactionTypes}
-                maxHeight={300}
-                itemTextStyle={styles.dropdownItemText}
-                itemContainerStyle={styles.dropdownItemContainer}
-                containerStyle={styles.dropdownListContainer}
-                labelField="label"
-                valueField="value"
-                placeholder={!isFocus ? "Select item" : "..."}
-                searchPlaceholder="Search..."
-                value={transction.type}
-                onChange={(item) => {
-                  setTransction({ ...transction, type: item.value });
-                }}
-              />
-            </View>
-
-            {/* Wallets*/}
-
-            <View style={styles.inputContainer}>
-              <Typo color={colors.neutral200}>Wallet</Typo>
-
-              <Dropdown
-                style={styles.dropdownContainer}
-                placeholderStyle={styles.dropdownPlaceholder}
-                activeColor={colors.neutral700}
-                selectedTextStyle={styles.dropdownSelectedText}
-                inputSearchStyle={styles.inputSearchStyle}
-                iconStyle={styles.dropdownIcon}
-                data={wallets.map((wallet) => ({
-                  label: `${wallet?.name} (₹${wallet.amount})`,
-                  value: wallet?.id,
-                }))}
-                search
-                maxHeight={300}
-                itemTextStyle={styles.dropdownItemText}
-                itemContainerStyle={styles.dropdownItemContainer}
-                containerStyle={styles.dropdownListContainer}
-                labelField="label"
-                valueField="value"
-                placeholder={"Select Wallet"}
-                searchPlaceholder="Search..."
-                value={transction.walletId}
-                onChange={(item) => {
-                  setTransction({ ...transction, walletId: item.value || "" });
-                }}
-              />
-            </View>
-
-            {/* Expense Categories*/}
-
-            {transction.type === "expense" && (
               <View style={styles.inputContainer}>
-                <Typo color={colors.neutral200}>Expense Categories</Typo>
+                <Typo color={colors.neutral200}>Type</Typo>
+
+                <Dropdown
+                  style={styles.dropdownContainer}
+                  activeColor={colors.neutral700}
+                  selectedTextStyle={styles.dropdownSelectedText}
+                  iconStyle={styles.dropdownIcon}
+                  data={transactionTypes}
+                  maxHeight={300}
+                  itemTextStyle={styles.dropdownItemText}
+                  itemContainerStyle={styles.dropdownItemContainer}
+                  containerStyle={styles.dropdownListContainer}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={!isFocus ? "Select item" : "..."}
+                  searchPlaceholder="Search..."
+                  value={transction.type}
+                  onChange={(item) => {
+                    setTransction({ ...transction, type: item.value });
+                  }}
+                />
+              </View>
+
+              {/* Wallets*/}
+
+              <View style={styles.inputContainer}>
+                <Typo color={colors.neutral200}>Wallet</Typo>
 
                 <Dropdown
                   style={styles.dropdownContainer}
@@ -237,7 +212,10 @@ const TransctionModal = () => {
                   selectedTextStyle={styles.dropdownSelectedText}
                   inputSearchStyle={styles.inputSearchStyle}
                   iconStyle={styles.dropdownIcon}
-                  data={Object.values(expenseCategories)}
+                  data={wallets.map((wallet) => ({
+                    label: `${wallet?.name} (₹${wallet.amount})`,
+                    value: wallet?.id,
+                  }))}
                   search
                   maxHeight={300}
                   itemTextStyle={styles.dropdownItemText}
@@ -245,98 +223,152 @@ const TransctionModal = () => {
                   containerStyle={styles.dropdownListContainer}
                   labelField="label"
                   valueField="value"
-                  placeholder={"Select Category"}
+                  placeholder={"Select Wallet"}
                   searchPlaceholder="Search..."
-                  value={transction.category}
+                  value={transction.walletId}
                   onChange={(item) => {
                     setTransction({
                       ...transction,
-                      category: item.value || "",
+                      walletId: item.value || "",
                     });
                   }}
                 />
               </View>
-            )}
 
-            {/* Date Picker*/}
+              {/* Expense Categories*/}
 
-            <View style={styles.inputContainer}>
-              <Typo color={colors.neutral200}>Date</Typo>
-              {!showDatePicker && (
-                <Pressable
-                  style={styles.dateInput}
-                  onPress={() => setShowDatePicker(true)}
-                >
-                  <Typo size={14}>
-                    {(transction.date as Date).toLocaleDateString()}
-                  </Typo>
-                </Pressable>
-              )}
+              {transction.type === "expense" && (
+                <View style={styles.inputContainer}>
+                  <Typo color={colors.neutral200}>Expense Categories</Typo>
 
-              {showDatePicker && (
-                <View style={Platform.OS == "ios" && styles.iosDatePicker}>
-                  <DateTimePicker
-                    themeVarient="dark"
-                    value={transction.date as Date}
-                    textColor={colors.white}
-                    mode="date"
-                    display={Platform.OS == "ios" ? "spinner" : "default"}
-                    onChange={onDateChange}
+                  <Dropdown
+                    style={styles.dropdownContainer}
+                    placeholderStyle={styles.dropdownPlaceholder}
+                    activeColor={colors.neutral700}
+                    selectedTextStyle={styles.dropdownSelectedText}
+                    inputSearchStyle={styles.inputSearchStyle}
+                    iconStyle={styles.dropdownIcon}
+                    data={Object.values(expenseCategories)}
+                    search
+                    maxHeight={300}
+                    itemTextStyle={styles.dropdownItemText}
+                    itemContainerStyle={styles.dropdownItemContainer}
+                    containerStyle={styles.dropdownListContainer}
+                    labelField="label"
+                    valueField="value"
+                    placeholder={"Select Category"}
+                    searchPlaceholder="Search..."
+                    value={transction.category}
+                    onChange={(item) => {
+                      setTransction({
+                        ...transction,
+                        category: item.value || "",
+                      });
+                    }}
                   />
                 </View>
               )}
-            </View>
 
-            <View style={styles.inputContainer}>
-              <Typo color={colors.neutral200}>Transctions Icon</Typo>
-              <ImageUpload
-                file={transction.image}
-                onSelect={(file) =>
-                  setTransction({ ...transction, image: file })
-                }
-                onClear={() => setTransction({ ...transction, image: null })}
+              {/* Date Picker*/}
+
+              <View style={styles.inputContainer}>
+                <Typo color={colors.neutral200}>Date</Typo>
+                {!showDatePicker && (
+                  <Pressable
+                    style={styles.dateInput}
+                    onPress={() => setShowDatePicker(true)}
+                  >
+                    <Typo size={14}>
+                      {(transction.date as Date).toLocaleDateString()}
+                    </Typo>
+                  </Pressable>
+                )}
+
+                {showDatePicker && (
+                  <View style={Platform.OS == "ios" && styles.iosDatePicker}>
+                    <DateTimePicker
+                      themeVarient="dark"
+                      value={transction.date as Date}
+                      textColor={colors.white}
+                      mode="date"
+                      display={Platform.OS == "ios" ? "spinner" : "default"}
+                      onChange={onDateChange}
+                    />
+                  </View>
+                )}
+              </View>
+
+              {/* Amount */}
+              <View style={styles.inputContainer}>
+                <Typo color={colors.neutral200}>Amount</Typo>
+
+                <Input
+                  placeholder="Salary"
+                  keyboardType="numeric"
+                  returnKeyType="done"
+                  blurOnSubmit
+                  value={transction.amount?.toString()}
+                  onChangeText={(value) =>
+                    setTransction({
+                      ...transction,
+                      amount: Number(value.replace(/[^0-9]/g, "")),
+                    })
+                  }
+                />
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Typo color={colors.neutral200}>Transctions Icon</Typo>
+                <ImageUpload
+                  file={transction.image}
+                  onSelect={(file) =>
+                    setTransction({ ...transction, image: file })
+                  }
+                  onClear={() => setTransction({ ...transction, image: null })}
+                />
+                <Typo
+                  size={11}
+                  color={colors.neutral500}
+                  style={{ marginTop: spacingY._5 }}
+                >
+                  Tip: Use simple icons so you can recognize transctionss
+                  quickly.
+                </Typo>
+              </View>
+            </View>
+          </ScrollView>
+        </View>
+
+        <View style={styles.footer}>
+          {isEditMode && !loading && (
+            <Buttton onPress={deleteAlert} style={styles.deleteButton}>
+              <Icons.Trash
+                color={colors.rose}
+                size={verticalScale(20)}
+                weight="bold"
               />
               <Typo
-                size={11}
-                color={colors.neutral500}
-                style={{ marginTop: spacingY._5 }}
+                size={13}
+                color={colors.rose}
+                fontWeight="600"
+                style={{ marginLeft: 6 }}
               >
-                Tip: Use simple icons so you can recognize transctionss quickly.
+                Delete
               </Typo>
-            </View>
-          </View>
-        </ScrollView>
-      </View>
+            </Buttton>
+          )}
 
-      <View style={styles.footer}>
-        {isEditMode && !loading && (
-          <Buttton onPress={deleteAlert} style={styles.deleteButton}>
-            <Icons.Trash
-              color={colors.rose}
-              size={verticalScale(20)}
-              weight="bold"
-            />
-            <Typo
-              size={13}
-              color={colors.rose}
-              fontWeight="600"
-              style={{ marginLeft: 6 }}
-            >
-              Delete
+          <Buttton
+            onPress={onSubmit}
+            loading={loading}
+            style={styles.primaryButton}
+          >
+            <Typo color={colors.black} fontWeight="700">
+              {isEditMode ? "Save Changes" : "Add transctions"}
             </Typo>
           </Buttton>
-        )}
-
-        <Buttton
-          onPress={onSubmit}
-          loading={loading}
-          style={styles.primaryButton}
-        >
-          <Typo color={colors.black} fontWeight="700">
-            {isEditMode ? "Save Changes" : "Add transctions"}
-          </Typo>
-        </Buttton>
-      </View>
+        </View>
+      </KeyboardAvoidingView>
     </ModalWrapper>
   );
 };

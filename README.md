@@ -100,7 +100,7 @@ yarn install
 
 ### 3️⃣ Start the Development Server
 ```bash
-npx expo start
+npm start
 ```
 
 ### 4️⃣ Run the App

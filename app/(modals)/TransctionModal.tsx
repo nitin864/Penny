@@ -1,6 +1,6 @@
 import BackButton from "@/components/BackButton";
 import Buttton from "@/components/Buttton";
-import { transactionTypes } from "@/components/data";
+import { expenseCategories, transactionTypes } from "@/components/data";
 import Header from "@/components/Header";
 import ImageUpload from "@/components/ImageUpload";
 import ModalWrapper from "@/components/ModalWrapper";
@@ -11,11 +11,19 @@ import useFetchData from "@/hooks/useFetchData";
 import { deleteWallet } from "@/services/walletServices";
 import { TransactionType, WalletType } from "@/types";
 import { scale, verticalScale } from "@/utils/styling";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { orderBy, where } from "firebase/firestore";
 import * as Icons from "phosphor-react-native";
 import React, { useState } from "react";
-import { Alert, ScrollView, StyleSheet, View } from "react-native";
+import {
+  Alert,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 
 const TransctionModal = () => {
@@ -32,6 +40,7 @@ const TransctionModal = () => {
 
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const oldTransctions = useLocalSearchParams<{
     name?: string;
@@ -76,10 +85,17 @@ const TransctionModal = () => {
     data: wallets = [],
     error: walletError,
     loading: walletLoading,
-  } = useFetchData<WalletType>('wallets', [
-    where('uid', '==', user?.uid),
-    orderBy('created', 'desc'),
+  } = useFetchData<WalletType>("wallets", [
+    where("uid", "==", user?.uid),
+    orderBy("created", "desc"),
   ]);
+
+  const onDateChange = (event: any, selectedDate: any) => {
+    const currentDate = selectedDate || transction.date;
+    setTransction({ ...transction, date: currentDate });
+    setShowDatePicker(false);
+  };
+
   // useEffect(() => {
   //   if (oldTransctions?.id) {
   //     setTransctions((prev) => ({
@@ -150,19 +166,17 @@ const TransctionModal = () => {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.formCard}>
+            {/*  Transction Type*/}
 
             <View style={styles.inputContainer}>
               <Typo color={colors.neutral200}>Type</Typo>
 
               <Dropdown
                 style={styles.dropdownContainer}
-                 
                 activeColor={colors.neutral700}
                 selectedTextStyle={styles.dropdownSelectedText}
-                 
                 iconStyle={styles.dropdownIcon}
                 data={transactionTypes}
-                
                 maxHeight={300}
                 itemTextStyle={styles.dropdownItemText}
                 itemContainerStyle={styles.dropdownItemContainer}
@@ -178,6 +192,8 @@ const TransctionModal = () => {
               />
             </View>
 
+            {/* Wallets*/}
+
             <View style={styles.inputContainer}>
               <Typo color={colors.neutral200}>Wallet</Typo>
 
@@ -188,9 +204,9 @@ const TransctionModal = () => {
                 selectedTextStyle={styles.dropdownSelectedText}
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.dropdownIcon}
-                data={wallets.map(wallet=>({
+                data={wallets.map((wallet) => ({
                   label: `${wallet?.name} (₹${wallet.amount})`,
-                  value: wallet?.id
+                  value: wallet?.id,
                 }))}
                 search
                 maxHeight={300}
@@ -203,9 +219,72 @@ const TransctionModal = () => {
                 searchPlaceholder="Search..."
                 value={transction.walletId}
                 onChange={(item) => {
-                  setTransction({ ...transction, walletId:  item.value || ""});
+                  setTransction({ ...transction, walletId: item.value || "" });
                 }}
               />
+            </View>
+
+            {/* Expense Categories*/}
+
+            {transction.type === "expense" && (
+              <View style={styles.inputContainer}>
+                <Typo color={colors.neutral200}>Expense Categories</Typo>
+
+                <Dropdown
+                  style={styles.dropdownContainer}
+                  placeholderStyle={styles.dropdownPlaceholder}
+                  activeColor={colors.neutral700}
+                  selectedTextStyle={styles.dropdownSelectedText}
+                  inputSearchStyle={styles.inputSearchStyle}
+                  iconStyle={styles.dropdownIcon}
+                  data={Object.values(expenseCategories)}
+                  search
+                  maxHeight={300}
+                  itemTextStyle={styles.dropdownItemText}
+                  itemContainerStyle={styles.dropdownItemContainer}
+                  containerStyle={styles.dropdownListContainer}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={"Select Category"}
+                  searchPlaceholder="Search..."
+                  value={transction.category}
+                  onChange={(item) => {
+                    setTransction({
+                      ...transction,
+                      category: item.value || "",
+                    });
+                  }}
+                />
+              </View>
+            )}
+
+            {/* Date Picker*/}
+
+            <View style={styles.inputContainer}>
+              <Typo color={colors.neutral200}>Date</Typo>
+              {!showDatePicker && (
+                <Pressable
+                  style={styles.dateInput}
+                  onPress={() => setShowDatePicker(true)}
+                >
+                  <Typo size={14}>
+                    {(transction.date as Date).toLocaleDateString()}
+                  </Typo>
+                </Pressable>
+              )}
+
+              {showDatePicker && (
+                <View style={Platform.OS == "ios" && styles.iosDatePicker}>
+                  <DateTimePicker
+                    themeVarient="dark"
+                    value={transction.date as Date}
+                    textColor={colors.white}
+                    mode="date"
+                    display={Platform.OS == "ios" ? "spinner" : "default"}
+                    onChange={onDateChange}
+                  />
+                </View>
+              )}
             </View>
 
             <View style={styles.inputContainer}>

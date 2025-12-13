@@ -1,3 +1,4 @@
+import Buttton from "@/components/Buttton";
 import HomeCard from "@/components/HomeCard";
 import ModalWrapper from "@/components/ModalWrapper";
 import TransctionList from "@/components/TransctionList";
@@ -5,7 +6,9 @@ import Typo from "@/components/Typo";
 import { colors, spacingX, spacingY } from "@/constants/theme";
 import { useAuth } from "@/context/authContext";
 import { verticalScale } from "@/utils/styling";
+ 
 import { Image } from "expo-image";
+import { router } from "expo-router";
 import * as Icons from "phosphor-react-native";
 import React from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
@@ -55,9 +58,17 @@ const HomeScreen = () => {
             <HomeCard />
           </View>
 
-          <TransctionList title="Recent Transctions" data={[1,2,3,4]} loading={false} emptyListMessage="No Transctions added yet!"/>
+          <TransctionList title="Recent Transctions" data={[1,2,3,4,5,6,7,8]} loading={false} emptyListMessage="No Transctions added yet!"/>
 
         </ScrollView>
+
+        <Buttton style={styles.floatingButton} onPress={()=> router.push('/(modals)/TransctionModal')}>
+           <Icons.Plus
+            color={colors.black}
+            weight="bold"
+            size={verticalScale(24)}
+           /> 
+        </Buttton>
       </View>
     </ModalWrapper>
   );

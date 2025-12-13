@@ -1,12 +1,14 @@
+import { FlashList } from "@shopify/flash-list";
+import React from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
+
 import { colors, radius, spacingX, spacingY } from "@/constants/theme";
 import { TransactionItemProps, TransactionListType } from "@/types";
 import { verticalScale } from "@/utils/styling";
-import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import Typo from "./Typo";
- 
-import { FlashList } from "@shopify/flash-list";
+
 import Loading from "./Loading";
+import Typo from "./Typo";
 import { expenseCategories } from "./data";
 
 const TransctionList = ({
@@ -15,130 +17,189 @@ const TransctionList = ({
   loading,
   emptyListMessage,
 }: TransactionListType) => {
-
-const handleClick = ()=> {
-  //todo: open up  transction details...
-}
+  const handleClick = (item: any) => {
+    console.log("Transaction:", item);
+  };
 
   return (
     <View style={styles.container}>
-       {
-        title && (
-          <Typo size={23} fontWeight={"500"}>
-            {title}
-          </Typo>
-        )
-       }
+      {title && (
+        <Typo size={25} fontWeight={"800"} style={styles.title}>
+          {title}
+        </Typo>
+      )}
 
-       <View style={styles.list}>
-         <FlashList
-      data={data}
-      renderItem={({ item , index}) => (<TransctionItem  item={item} index={index} handleClick={handleClick}/> )}
-       estimatedItemSize={60}
+      <FlashList
+        data={data}
+        keyExtractor={(_, index) => index.toString()}
+        renderItem={({ item, index }) => (
+          <TransctionItem
+            item={item}
+            index={index}
+            handleClick={handleClick}
+          />
+        )}
+        estimatedItemSize={82}
+        showsVerticalScrollIndicator={false}
       />
-       </View>
-       {
 
-        !loading && (!data || data.length === 0) && (
-          <Typo size={15} color={colors.neutral400} style={{textAlign: 'center' , marginTop: spacingY._15}}>
-            {emptyListMessage}
-          </Typo>
-        ) 
-       }
+      {!loading && (!data || data.length === 0) && (
+        <Typo size={15} color={colors.neutral400} style={styles.emptyText}>
+          {emptyListMessage}
+        </Typo>
+      )}
 
-       {
-         
-         loading && (
-          <View style={{ top: verticalScale(100)}}>
-           <Loading/>  
-          </View>
-         )
-
-       }
+      {loading && (
+        <View style={styles.loader}>
+          <Loading />
+        </View>
+      )}
     </View>
   );
 };
 
+/* -------------------- Transaction Card -------------------- */
 
-const TransctionItem = ({
-  item ,index , handleClick
-}: TransactionItemProps)=>{
-  
-  let category = expenseCategories['dining'];
+const TransctionItem = ({ item, index, handleClick }: TransactionItemProps) => {
+  const category = expenseCategories["dining"];
   const IconComponent = category.icon;
 
+  return (
+    <Animated.View
+      entering={FadeInDown.delay(index * 55).springify().damping(18)}
+    >
+      <TouchableOpacity
+        activeOpacity={0.9}
+        onPress={() => handleClick(item)}
+        style={styles.cardOuter}
+      >
+        <View style={styles.cardInner}>
+          {/* Icon with glow */}
+          <View style={styles.iconGlow}>
+            <View
+              style={[
+                styles.iconWrap,
+                { backgroundColor: category.bgColor },
+              ]}
+            >
+              {IconComponent && (
+                <IconComponent
+                  size={verticalScale(20)}
+                  weight="fill"
+                  color={colors.white}
+                />
+              )}
+            </View>
+          </View>
 
-  return ( 
-  <View>
-    <TouchableOpacity style={styles.row}>
-        <View style={[styles.icon , {backgroundColor: category.bgColor}]}>
-          {IconComponent && (
-            <IconComponent 
-              size={verticalScale(25)}
-              weight="fill"
-              color={colors.white}
-            />  
-          )}
-        </View>
-        <View style={styles.categoryDes}>
-          <Typo size={17} >{category.label}</Typo>
-          <Typo size={12} color={colors.neutral400} textProps={{numberOfLines: 1}}>
-             paid for doretoes
-          </Typo>
-        </View>
+          {/* Middle */}
+          <View style={styles.center}>
+            <Typo size={16.8} fontWeight={"600"}>
+              {category.label}
+            </Typo>
+            <Typo
+              size={12}
+              color={colors.neutral400}
+              textProps={{ numberOfLines: 1 }}
+            >
+              Paid for Doritos
+            </Typo>
+          </View>
 
-        <View style={styles.amountDate}>
-          <Typo fontWeight={"500"} color={colors.primary}>
-            ₹249
-          </Typo>
+          {/* Right */}
+          <View style={styles.right}>
+            <View style={styles.amountBadge}>
+              <Typo size={13.5} fontWeight={"700"} color={colors.rose}>
+                − ₹249
+              </Typo>
+            </View>
+            <Typo size={11.5} color={colors.neutral400}>
+              12 Jan
+            </Typo>
+          </View>
         </View>
-    </TouchableOpacity>
-  </View>
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
 
 export default TransctionList;
 
+/* --------------------------- Styles --------------------------- */
+
 const styles = StyleSheet.create({
   container: {
-    gap: spacingY._17,
-    // flex: 1,
-    // backgroundColor: "red",
+    gap: spacingY._15,
   },
 
-  list: {
-    minHeight: 3,
+  title: {
+    letterSpacing: 0.3,
   },
 
-  row: {
+  emptyText: {
+    textAlign: "center",
+    marginTop: spacingY._20,
+  },
+
+  loader: {
+    marginTop: verticalScale(120),
+  },
+
+  /* Outer card (depth layer) */
+  cardOuter: {
+    marginBottom: spacingY._15,
+    borderRadius: radius._20,
+    backgroundColor: "rgba(255,255,255,0.03)",
+  },
+
+  /* Inner card (actual surface) */
+  cardInner: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    gap: spacingX._12,
-    marginBottom: spacingY._12,
+    gap: spacingX._15,
 
-    // list with background
-    backgroundColor: colors.neutral800,
-    padding: spacingY._10,
-    paddingHorizontal: spacingY._10,
-    borderRadius: radius._17,
+    backgroundColor: colors.neutral900,
+    paddingVertical: spacingY._15,
+    paddingHorizontal: spacingX._15,
+    borderRadius: radius._20,
+
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.4,
+    shadowRadius: 20,
+    elevation: 7,
   },
-  icon: {
-    height: verticalScale(44),
+
+  /* Icon glow wrapper */
+  iconGlow: {
+    shadowColor: colors.primary,
+    shadowOpacity: 0.35,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 0 },
+  },
+
+  iconWrap: {
+    height: verticalScale(46),
     aspectRatio: 1,
+    borderRadius: radius._15,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: radius._12,
-    borderCurve: "continuous",
   },
 
-  categoryDes: {
+  center: {
     flex: 1,
-    gap: 2.5,
+    gap: 4,
   },
 
-  amountDate: {
+  right: {
     alignItems: "flex-end",
-    gap: 3,
+    gap: 6,
+  },
+
+  amountBadge: {
+    backgroundColor: "rgba(239,68,68,0.14)",
+    paddingHorizontal: spacingX._12,
+    paddingVertical: 4,
+    borderRadius: radius._15,
   },
 });

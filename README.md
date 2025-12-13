@@ -1,16 +1,6 @@
 # 💸 Expense Tracker App
 
- (./screenshots/1.png)
- (https://raw.githubusercontent.com/nitin864/expense-tracker-app/main/screenshots/2.png)
- (https://raw.githubusercontent.com/nitin864/expense-tracker-app/main/screenshots/3.png)
- (https://raw.githubusercontent.com/nitin864/expense-tracker-app/main/screenshots/4.png)
- (https://raw.githubusercontent.com/nitin864/expense-tracker-app/main/screenshots/5.png)
- (https://raw.githubusercontent.com/nitin864/expense-tracker-app/main/screenshots/6.png)
- (https://raw.githubusercontent.com/nitin864/expense-tracker-app/main/screenshots/7.png)
- (https://raw.githubusercontent.com/nitin864/expense-tracker-app/main/screenshots/8.png)
-
-  
-  
+ 
   
 A modern **Expense Tracker mobile application** built using **React Native & Expo**, designed to manage wallets, track transactions, and provide spending insights with a clean and smooth dark UI.
 

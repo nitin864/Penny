@@ -1,6 +1,6 @@
 # 💸 Expense Tracker App
 
- (https://raw.githubusercontent.com/nitin864/Penny/main/screenshots/1.png)
+ (./screenshots/1.png)
  (https://raw.githubusercontent.com/nitin864/expense-tracker-app/main/screenshots/2.png)
  (https://raw.githubusercontent.com/nitin864/expense-tracker-app/main/screenshots/3.png)
  (https://raw.githubusercontent.com/nitin864/expense-tracker-app/main/screenshots/4.png)

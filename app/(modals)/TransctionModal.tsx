@@ -1,20 +1,22 @@
 import BackButton from "@/components/BackButton";
 import Buttton from "@/components/Buttton";
+import { transactionTypes } from "@/components/data";
 import Header from "@/components/Header";
 import ImageUpload from "@/components/ImageUpload";
 import ModalWrapper from "@/components/ModalWrapper";
 import Typo from "@/components/Typo";
 import { colors, radius, spacingX, spacingY } from "@/constants/theme";
 import { useAuth } from "@/context/authContext";
+import useFetchData from "@/hooks/useFetchData";
 import { deleteWallet } from "@/services/walletServices";
-import { TransactionType } from "@/types";
+import { TransactionType, WalletType } from "@/types";
 import { scale, verticalScale } from "@/utils/styling";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { orderBy, where } from "firebase/firestore";
 import * as Icons from "phosphor-react-native";
 import React, { useState } from "react";
-import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
-
 
 const TransctionModal = () => {
   const { user } = useAuth();
@@ -69,30 +71,15 @@ const TransctionModal = () => {
     );
   };
 
-    const data = [
-    { label: 'Item 1', value: '1' },
-    { label: 'Item 2', value: '2' },
-    { label: 'Item 3', value: '3' },
-    { label: 'Item 4', value: '4' },
-    { label: 'Item 5', value: '5' },
-    { label: 'Item 6', value: '6' },
-    { label: 'Item 7', value: '7' },
-    { label: 'Item 8', value: '8' },
-  ];
-    const [value, setValue] = useState(null);
-    const [isFocus, setIsFocus] = useState(false);
-    
-        const renderLabel = () => {
-      if (value || isFocus) {
-        return (
-          <Text style={[styles.label, isFocus && { color: 'blue' }]}>
-            Dropdown label
-          </Text>
-        );
-      }
-      return null;
-    };
-
+  const [isFocus, setIsFocus] = useState(false);
+  const {
+    data: wallets = [],
+    error: walletError,
+    loading: walletLoading,
+  } = useFetchData<WalletType>('wallets', [
+    where('uid', '==', user?.uid),
+    orderBy('created', 'desc'),
+  ]);
   // useEffect(() => {
   //   if (oldTransctions?.id) {
   //     setTransctions((prev) => ({
@@ -103,31 +90,27 @@ const TransctionModal = () => {
   //   }
   // }, []);
 
-   const onSubmit = async () => {
-  //   let { name, image } = transction;
-  //   if (!name.trim() || !image) {
-  //     Alert.alert("transctions", "Please fill all fields");
-  //     return;
-  //   }
-
-  //   const data: transctionsType = {
-  //     name,
-  //     image,
-  //     uid: user?.uid,
-  //   };
-
-  //   if (oldTransctions?.id) data.id = oldTransctions.id as any;
-
-  //   setLoading(true);
-  //   const res = await createOrUpdatetransctions(data);
-  //   setLoading(false);
-
-  //   if (res.success) {
-  //     router.back();
-  //   } else {
-  //     Alert.alert("transctions", res.msg);
-  //   }
-   };
+  const onSubmit = async () => {
+    //   let { name, image } = transction;
+    //   if (!name.trim() || !image) {
+    //     Alert.alert("transctions", "Please fill all fields");
+    //     return;
+    //   }
+    //   const data: transctionsType = {
+    //     name,
+    //     image,
+    //     uid: user?.uid,
+    //   };
+    //   if (oldTransctions?.id) data.id = oldTransctions.id as any;
+    //   setLoading(true);
+    //   const res = await createOrUpdatetransctions(data);
+    //   setLoading(false);
+    //   if (res.success) {
+    //     router.back();
+    //   } else {
+    //     Alert.alert("transctions", res.msg);
+    //   }
+  };
 
   const isEditMode = !!oldTransctions?.id;
 
@@ -161,47 +144,78 @@ const TransctionModal = () => {
           )}
         </View>
 
-        <ScrollView contentContainerStyle={styles.form} bounces={false} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          contentContainerStyle={styles.form}
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.formCard}>
+
             <View style={styles.inputContainer}>
               <Typo color={colors.neutral200}>Type</Typo>
-               
-          <Dropdown
-          style={styles.dropdownContainer}
-          placeholderStyle={styles.dropdownPlaceholder}
-          activeColor={colors.neutral700}
-          selectedTextStyle={styles.dropdownSelectedText}
-          inputSearchStyle={styles.inputSearchStyle}
-          iconStyle={styles.dropdownIcon}
-          data={data}
-          search
-          maxHeight={300}
-          itemTextStyle={styles.dropdownItemText}
-          itemContainerStyle={styles.dropdownItemContainer}
-          containerStyle={styles.dropdownListContainer}
-          labelField="label"
-          valueField="value"
-          placeholder={!isFocus ? 'Select item' : '...'}
-          searchPlaceholder="Search..."
-          value={value}
-   
-          onChange={item => {
-            setValue(item.value);
-            setIsFocus(false);
-          }}
- 
-          />
+
+              <Dropdown
+                style={styles.dropdownContainer}
+                 
+                activeColor={colors.neutral700}
+                selectedTextStyle={styles.dropdownSelectedText}
+                 
+                iconStyle={styles.dropdownIcon}
+                data={transactionTypes}
                 
-                
+                maxHeight={300}
+                itemTextStyle={styles.dropdownItemText}
+                itemContainerStyle={styles.dropdownItemContainer}
+                containerStyle={styles.dropdownListContainer}
+                labelField="label"
+                valueField="value"
+                placeholder={!isFocus ? "Select item" : "..."}
+                searchPlaceholder="Search..."
+                value={transction.type}
+                onChange={(item) => {
+                  setTransction({ ...transction, type: item.value });
+                }}
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Typo color={colors.neutral200}>Wallet</Typo>
+
+              <Dropdown
+                style={styles.dropdownContainer}
+                placeholderStyle={styles.dropdownPlaceholder}
+                activeColor={colors.neutral700}
+                selectedTextStyle={styles.dropdownSelectedText}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.dropdownIcon}
+                data={wallets.map(wallet=>({
+                  label: `${wallet?.name} (₹${wallet.amount})`,
+                  value: wallet?.id
+                }))}
+                search
+                maxHeight={300}
+                itemTextStyle={styles.dropdownItemText}
+                itemContainerStyle={styles.dropdownItemContainer}
+                containerStyle={styles.dropdownListContainer}
+                labelField="label"
+                valueField="value"
+                placeholder={"Select Wallet"}
+                searchPlaceholder="Search..."
+                value={transction.walletId}
+                onChange={(item) => {
+                  setTransction({ ...transction, walletId:  item.value || ""});
+                }}
+              />
             </View>
 
             <View style={styles.inputContainer}>
               <Typo color={colors.neutral200}>Transctions Icon</Typo>
               <ImageUpload
                 file={transction.image}
-                onSelect={(file) => setTransction({ ...transction, image: file })}
+                onSelect={(file) =>
+                  setTransction({ ...transction, image: file })
+                }
                 onClear={() => setTransction({ ...transction, image: null })}
-                
               />
               <Typo
                 size={11}
@@ -217,10 +231,7 @@ const TransctionModal = () => {
 
       <View style={styles.footer}>
         {isEditMode && !loading && (
-          <Buttton
-            onPress={deleteAlert}
-            style={styles.deleteButton}
-          >
+          <Buttton onPress={deleteAlert} style={styles.deleteButton}>
             <Icons.Trash
               color={colors.rose}
               size={verticalScale(20)}
@@ -258,7 +269,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     paddingHorizontal: spacingX._20,
-     marginTop: verticalScale(25),
+    marginTop: verticalScale(25),
   },
 
   subtitleRow: {
@@ -280,15 +291,12 @@ const styles = StyleSheet.create({
     gap: 4,
   },
 
- 
-
   formCard: {
     gap: spacingY._20,
     borderRadius: radius._20,
     paddingHorizontal: spacingX._15,
     paddingVertical: spacingY._20,
     backgroundColor: colors.neutral800,
-    
   },
 
   inputContainer: {
@@ -321,17 +329,13 @@ const styles = StyleSheet.create({
   primaryButton: {
     flex: 1,
   },
-    /* ---------- Containers ---------- */
- 
+  /* ---------- Containers ---------- */
 
   form: {
     gap: spacingY._20,
     paddingVertical: spacingY._15,
     paddingBottom: spacingY._40,
   },
-
- 
- 
 
   flexRow: {
     flexDirection: "row",
@@ -350,33 +354,31 @@ const styles = StyleSheet.create({
     backgroundColor: colors.neutral900,
   },
   inputSearchStyle: {
-  height: verticalScale(40),
-  fontSize: verticalScale(14),
-  color: colors.white,
-  backgroundColor: colors.neutral800,
-  borderRadius: radius._10,
-  paddingHorizontal: spacingX._10,
-},
-dropdownListContainer: {
-  backgroundColor: colors.neutral900,
-  borderRadius: radius._15,
-  borderCurve: "continuous",
-  paddingVertical: spacingY._7,
-  top: 5,
-  borderColor: colors.neutral500,
-  shadowColor: colors.black,
-  shadowOffset: { width: 0, height: 5 },
-  shadowOpacity: 1,
-  shadowRadius: 15,
-  elevation: 5,
-},
+    height: verticalScale(40),
+    fontSize: verticalScale(14),
+    color: colors.white,
+    backgroundColor: colors.neutral800,
+    borderRadius: radius._10,
+    paddingHorizontal: spacingX._10,
+  },
+  dropdownListContainer: {
+    backgroundColor: colors.neutral900,
+    borderRadius: radius._15,
+    borderCurve: "continuous",
+    paddingVertical: spacingY._7,
+    top: 5,
+    borderColor: colors.neutral500,
+    shadowColor: colors.black,
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 1,
+    shadowRadius: 15,
+    elevation: 5,
+  },
 
-dropdownItemContainer: {
-  borderRadius: radius._15,
-  marginHorizontal: spacingX._7,
-},
-
-
+  dropdownItemContainer: {
+    borderRadius: radius._15,
+    marginHorizontal: spacingX._7,
+  },
 
   dropdown: {
     height: verticalScale(54),
@@ -400,7 +402,7 @@ dropdownItemContainer: {
     height: verticalScale(30),
     tintColor: colors.neutral300,
   },
-  dropdownItemText:  {color: colors.white},
+  dropdownItemText: { color: colors.white },
 
   /* ---------- Date Picker ---------- */
   dateInput: {
@@ -411,7 +413,7 @@ dropdownItemContainer: {
     borderColor: colors.neutral300,
     borderRadius: radius._17,
     borderCurve: "continuous",
-    paddingHorizontal: spacingX._15
+    paddingHorizontal: spacingX._15,
   },
 
   datePickerButton: {

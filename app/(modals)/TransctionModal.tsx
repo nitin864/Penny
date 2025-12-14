@@ -59,14 +59,14 @@ const TransctionModal = () => {
     if (res.success) {
       router.back();
     } else {
-      Alert.alert("transctions", res.msg);
+      Alert.alert("transaction", res.msg);
     }
   };
 
   const deleteAlert = () => {
     Alert.alert(
-      "Delete transctions?",
-      "This will remove this transctions and recent transactions linked to it.",
+      "Delete transaction?",
+      "This will remove this transaction and recent transaction linked to it.",
       [
         {
           text: "Cancel",
@@ -109,25 +109,27 @@ const TransctionModal = () => {
   // }, []);
 
   const onSubmit = async () => {
-    //   let { name, image } = transction;
-    //   if (!name.trim() || !image) {
-    //     Alert.alert("transctions", "Please fill all fields");
-    //     return;
-    //   }
-    //   const data: transctionsType = {
-    //     name,
-    //     image,
-    //     uid: user?.uid,
-    //   };
-    //   if (oldTransctions?.id) data.id = oldTransctions.id as any;
-    //   setLoading(true);
-    //   const res = await createOrUpdatetransctions(data);
-    //   setLoading(false);
-    //   if (res.success) {
-    //     router.back();
-    //   } else {
-    //     Alert.alert("transctions", res.msg);
-    //   }
+     const {type, amount , description , category, date , walletId , image} = transction;
+
+     if(!walletId || !date || !amount || (type == "expense" && !category)){
+      Alert.alert("Transaction", "Please fill all the fields");
+      return;
+     }
+
+     console.log("good to go");
+     let transactionData: TransactionType = {
+      type,
+      amount,
+      description,
+      category,
+      date,
+      walletId,
+      image,
+      uid: user?.uid
+     }
+
+
+     console.log("tranction data: " , transactionData);
   };
 
   const isEditMode = !!oldTransctions?.id;
@@ -141,7 +143,7 @@ const TransctionModal = () => {
       >
         <View style={styles.container}>
           <Header
-            title={isEditMode ? "Update transctions" : "New transctions"}
+            title={isEditMode ? "Update transactions" : "New transactions"}
             leftIcon={<BackButton />}
             style={{ marginBottom: spacingY._10 }}
           />
@@ -149,8 +151,8 @@ const TransctionModal = () => {
           <View style={styles.subtitleRow}>
             <Typo size={13} color={colors.neutral400}>
               {isEditMode
-                ? "Change transctions name or icon."
-                : "Create a transctions to track your money."}
+                ? "Change transactions name or icon."
+                : "Create a transactions to track your money."}
             </Typo>
 
             {isEditMode && (
@@ -177,7 +179,9 @@ const TransctionModal = () => {
               {/*  Transction Type*/}
 
               <View style={styles.inputContainer}>
-                <Typo color={colors.neutral200}>Type</Typo>
+                <Typo color={colors.neutral200} size={16}>
+                  Type
+                </Typo>
 
                 <Dropdown
                   style={styles.dropdownContainer}
@@ -203,7 +207,9 @@ const TransctionModal = () => {
               {/* Wallets*/}
 
               <View style={styles.inputContainer}>
-                <Typo color={colors.neutral200}>Wallet</Typo>
+                <Typo color={colors.neutral200} size={16}>
+                  Wallet
+                </Typo>
 
                 <Dropdown
                   style={styles.dropdownContainer}
@@ -239,7 +245,9 @@ const TransctionModal = () => {
 
               {transction.type === "expense" && (
                 <View style={styles.inputContainer}>
-                  <Typo color={colors.neutral200}>Expense Categories</Typo>
+                  <Typo color={colors.neutral200} size={16}>
+                    Expense Categories
+                  </Typo>
 
                   <Dropdown
                     style={styles.dropdownContainer}
@@ -272,7 +280,9 @@ const TransctionModal = () => {
               {/* Date Picker*/}
 
               <View style={styles.inputContainer}>
-                <Typo color={colors.neutral200}>Date</Typo>
+                <Typo color={colors.neutral200} size={16}>
+                  Date
+                </Typo>
                 {!showDatePicker && (
                   <Pressable
                     style={styles.dateInput}
@@ -300,7 +310,9 @@ const TransctionModal = () => {
 
               {/* Amount */}
               <View style={styles.inputContainer}>
-                <Typo color={colors.neutral200}>Amount</Typo>
+                <Typo color={colors.neutral200} size={16}>
+                  Amount
+                </Typo>
 
                 <Input
                   placeholder="Salary"
@@ -318,7 +330,46 @@ const TransctionModal = () => {
               </View>
 
               <View style={styles.inputContainer}>
-                <Typo color={colors.neutral200}>Transctions Icon</Typo>
+                <View style={styles.flexRow}>
+                  <Typo color={colors.neutral200} size={16}>
+                    Description
+                  </Typo>
+                  <Typo color={colors.neutral500} size={14}>
+                    (optional)
+                  </Typo>
+                </View>
+
+                <Input
+                  value={transction.description}
+                  multiline
+                  containerStyle={{
+                    flexDirection: "row",
+                    height: verticalScale(100),
+                    alignItems: "flex-start",
+                    paddingVertical: 15,
+                  }}
+                  inputStyle={{
+                    textAlignVertical: "top",
+                  }}
+                  onChangeText={(value) =>
+                    setTransction({
+                      ...transction,
+                      description: value,
+                    })
+                  }
+                />
+              </View>
+
+              <View style={styles.inputContainer}>
+                <View style={styles.flexRow}>
+                  <Typo color={colors.neutral200} size={16}>
+                    Receipt
+                  </Typo>
+                  <Typo color={colors.neutral500} size={14}>
+                    (optional)
+                  </Typo>
+                </View>
+
                 <ImageUpload
                   file={transction.image}
                   onSelect={(file) =>
@@ -331,7 +382,7 @@ const TransctionModal = () => {
                   color={colors.neutral500}
                   style={{ marginTop: spacingY._5 }}
                 >
-                  Tip: Use simple icons so you can recognize transctionss
+                  Tip: Use simple icons so you can recognize transactions
                   quickly.
                 </Typo>
               </View>
@@ -364,7 +415,7 @@ const TransctionModal = () => {
             style={styles.primaryButton}
           >
             <Typo color={colors.black} fontWeight="700">
-              {isEditMode ? "Save Changes" : "Add transctions"}
+              {isEditMode ? "Update" : "Submit"}
             </Typo>
           </Buttton>
         </View>

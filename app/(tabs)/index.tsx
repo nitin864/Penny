@@ -5,16 +5,31 @@ import TransctionList from "@/components/TransctionList";
 import Typo from "@/components/Typo";
 import { colors, spacingX, spacingY } from "@/constants/theme";
 import { useAuth } from "@/context/authContext";
+import useFetchData from "@/hooks/useFetchData";
+import { TransactionType } from "@/types";
 import { verticalScale } from "@/utils/styling";
  
 import { Image } from "expo-image";
 import { router } from "expo-router";
+import { limit, orderBy, where } from "firebase/firestore";
 import * as Icons from "phosphor-react-native";
 import React from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 const HomeScreen = () => {
   const { user } = useAuth();
+
+  const constraints = [
+    where("uid", "==", user?.uid),
+    orderBy("date" , "desc"), 
+    limit(90)
+  ];
+
+    const {
+      data: recentTransactions,
+      error,
+      loading: transactionsLoading,
+    } = useFetchData<TransactionType>('transactions', constraints);
 
   return (
     <ModalWrapper>
@@ -58,7 +73,7 @@ const HomeScreen = () => {
             <HomeCard />
           </View>
 
-          <TransctionList title="Recent Transctions" data={[1,2,3,4,5,6,7,8]} loading={false} emptyListMessage="No Transctions added yet!"/>
+          <TransctionList title="Recent Transctions" data={recentTransactions} loading={false} emptyListMessage="No Transctions added yet!"/>
 
         </ScrollView>
 

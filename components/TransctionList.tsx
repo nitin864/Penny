@@ -17,6 +17,9 @@ const TransctionList = ({
   loading,
   emptyListMessage,
 }: TransactionListType) => {
+   
+  
+  
   const handleClick = (item: any) => {
     console.log("Transaction:", item);
   };
@@ -61,6 +64,8 @@ const TransctionList = ({
 /* -------------------- Transaction Card -------------------- */
 
 const TransctionItem = ({ item, index, handleClick }: TransactionItemProps) => {
+
+  console.log("item.des: ", item?.description);
   const category = expenseCategories["dining"];
   const IconComponent = category.icon;
 

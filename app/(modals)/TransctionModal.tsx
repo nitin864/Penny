@@ -9,6 +9,7 @@ import Typo from "@/components/Typo";
 import { colors, radius, spacingX, spacingY } from "@/constants/theme";
 import { useAuth } from "@/context/authContext";
 import useFetchData from "@/hooks/useFetchData";
+import { createOrUpdateTransaction } from "@/services/transctionServices";
 import { deleteWallet } from "@/services/walletServices";
 import { TransactionType, WalletType } from "@/types";
 import { scale, verticalScale } from "@/utils/styling";
@@ -116,7 +117,6 @@ const TransctionModal = () => {
       return;
      }
 
-     console.log("good to go");
      let transactionData: TransactionType = {
       type,
       amount,
@@ -129,7 +129,18 @@ const TransctionModal = () => {
      }
 
 
-     console.log("tranction data: " , transactionData);
+ 
+     //todo: include transaction id for updating
+
+     setLoading(true);
+     const res = await createOrUpdateTransaction(transactionData);
+
+     setLoading(false);
+      if(res.success){
+        router.back();
+      }else{
+        Alert.alert("Transaction" , res.msg)
+      }
   };
 
   const isEditMode = !!oldTransctions?.id;
@@ -297,7 +308,8 @@ const TransctionModal = () => {
                 {showDatePicker && (
                   <View style={Platform.OS == "ios" && styles.iosDatePicker}>
                     <DateTimePicker
-                      themeVarient="dark"
+                      themeVariant="dark"
+
                       value={transction.date as Date}
                       textColor={colors.white}
                       mode="date"
@@ -382,8 +394,7 @@ const TransctionModal = () => {
                   color={colors.neutral500}
                   style={{ marginTop: spacingY._5 }}
                 >
-                  Tip: Use simple icons so you can recognize transactions
-                  quickly.
+                  Tip: Upload the receipt so you can easily verify and track this transaction later.
                 </Typo>
               </View>
             </View>

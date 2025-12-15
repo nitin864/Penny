@@ -7,9 +7,10 @@ import { colors, radius, spacingX, spacingY } from "@/constants/theme";
 import { TransactionItemProps, TransactionListType } from "@/types";
 import { verticalScale } from "@/utils/styling";
 
+import { Timestamp } from "firebase/firestore";
 import Loading from "./Loading";
 import Typo from "./Typo";
-import { expenseCategories } from "./data";
+import { expenseCategories, incomeCategory } from "./data";
 
 const TransctionList = ({
   data,
@@ -17,11 +18,8 @@ const TransctionList = ({
   loading,
   emptyListMessage,
 }: TransactionListType) => {
-   
-  
-  
   const handleClick = (item: any) => {
-    console.log("Transaction:", item);
+     
   };
 
   return (
@@ -36,11 +34,7 @@ const TransctionList = ({
         data={data}
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item, index }) => (
-          <TransctionItem
-            item={item}
-            index={index}
-            handleClick={handleClick}
-          />
+          <TransctionItem item={item} index={index} handleClick={handleClick} />
         )}
         estimatedItemSize={82}
         showsVerticalScrollIndicator={false}
@@ -64,14 +58,23 @@ const TransctionList = ({
 /* -------------------- Transaction Card -------------------- */
 
 const TransctionItem = ({ item, index, handleClick }: TransactionItemProps) => {
-
-  console.log("item.des: ", item?.description);
-  const category = expenseCategories["dining"];
+  const category =
+    item?.type == "income" ? incomeCategory : expenseCategories[item.category!];
   const IconComponent = category.icon;
+   
+  const date = item?.date
+  ? (item.date as Timestamp).toDate().toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short"
+  })
+  : "";
+
 
   return (
     <Animated.View
-      entering={FadeInDown.delay(index * 55).springify().damping(18)}
+      entering={FadeInDown.delay(index * 55)
+        .springify()
+        .damping(18)}
     >
       <TouchableOpacity
         activeOpacity={0.9}
@@ -82,10 +85,7 @@ const TransctionItem = ({ item, index, handleClick }: TransactionItemProps) => {
           {/* Icon with glow */}
           <View style={styles.iconGlow}>
             <View
-              style={[
-                styles.iconWrap,
-                { backgroundColor: category.bgColor },
-              ]}
+              style={[styles.iconWrap, { backgroundColor: category.bgColor }]}
             >
               {IconComponent && (
                 <IconComponent
@@ -107,19 +107,33 @@ const TransctionItem = ({ item, index, handleClick }: TransactionItemProps) => {
               color={colors.neutral400}
               textProps={{ numberOfLines: 1 }}
             >
-              Paid for Doritos
+              {item?.description}
             </Typo>
           </View>
 
           {/* Right */}
           <View style={styles.right}>
-            <View style={styles.amountBadge}>
-              <Typo size={13.5} fontWeight={"700"} color={colors.rose}>
-                − ₹249
+            <View
+              style={[
+                styles.amountBadge,
+                {
+                  backgroundColor:
+                    item?.type === "income"
+                      ? "rgba(4, 45, 20, 0.93)" // green
+                      : "rgba(239,68,68,0.15)", // red
+                },
+              ]}
+            >
+              <Typo
+                size={13.5}
+                fontWeight={"700"}
+                color={item?.type == "income" ? colors.primary : colors.rose}
+              >
+                {`${item?.type == "income" ? "+ ₹" : "- ₹"}${item?.amount}`}
               </Typo>
             </View>
             <Typo size={11.5} color={colors.neutral400}>
-              12 Jan
+               {date}
             </Typo>
           </View>
         </View>

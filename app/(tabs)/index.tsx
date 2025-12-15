@@ -73,7 +73,12 @@ const HomeScreen = () => {
             <HomeCard />
           </View>
 
-          <TransctionList title="Recent Transctions" data={recentTransactions} loading={false} emptyListMessage="No Transctions added yet!"/>
+          <TransctionList 
+            title="Recent Transctions" 
+            data={recentTransactions} 
+            loading={transactionsLoading} 
+            emptyListMessage="No Transctions added yet!"
+          />
 
         </ScrollView>
 

@@ -17,7 +17,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { orderBy, where } from "firebase/firestore";
 import * as Icons from "phosphor-react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -45,11 +45,20 @@ const TransctionModal = () => {
   const router = useRouter();
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const oldTransctions = useLocalSearchParams<{
-    name?: string;
-    image?: string;
-    id?: string;
-  }>();
+type paramType = {
+  id: string;
+  type: string;
+  amount: string;
+  category: string;
+  date: string;
+  description: string;
+  image?: any;
+  uid?: string;
+  walletId: string;
+};
+
+const oldTransctions = useLocalSearchParams() as paramType;
+
 
   const OnDelete = async () => {
     if (!oldTransctions?.id) return;
@@ -99,15 +108,20 @@ const TransctionModal = () => {
     setShowDatePicker(false);
   };
 
-  // useEffect(() => {
-  //   if (oldTransctions?.id) {
-  //     setTransctions((prev) => ({
-  //       ...prev,
-  //       name: oldTransctions.name ?? prev.name,
-  //       image: (oldTransctions.image as any) ?? prev.image,
-  //     }));
-  //   }
-  // }, []);
+  useEffect(() => {
+  if (oldTransctions?.id) {
+    setTransction({
+      type: oldTransctions.type,
+      amount: Number(oldTransctions.amount),
+      description: oldTransctions.description || "",
+      category: oldTransctions.category || "",
+      date: new Date(oldTransctions.date),
+      walletId: oldTransctions.walletId,
+      image: oldTransctions.image,
+    });
+  }
+}, []);
+
 
   const onSubmit = async () => {
      const {type, amount , description , category, date , walletId , image} = transction;
@@ -124,13 +138,13 @@ const TransctionModal = () => {
       category,
       date,
       walletId,
-      image,
+      image : image ? image: null,
       uid: user?.uid
      }
-
+     
 
  
-     //todo: include transaction id for updating
+     if(oldTransctions?.id) transactionData.id = oldTransctions.id;
 
      setLoading(true);
      const res = await createOrUpdateTransaction(transactionData);

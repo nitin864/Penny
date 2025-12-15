@@ -4,9 +4,10 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 import { colors, radius, spacingX, spacingY } from "@/constants/theme";
-import { TransactionItemProps, TransactionListType } from "@/types";
+import { TransactionItemProps, TransactionListType, TransactionType } from "@/types";
 import { verticalScale } from "@/utils/styling";
 
+import { router } from "expo-router";
 import { Timestamp } from "firebase/firestore";
 import Loading from "./Loading";
 import Typo from "./Typo";
@@ -18,14 +19,27 @@ const TransctionList = ({
   loading,
   emptyListMessage,
 }: TransactionListType) => {
-  const handleClick = (item: any) => {
-     
+  const handleClick = (item: TransactionType) => {
+    router.push({
+      pathname: "/(modals)/TransctionModal",
+      params: {
+        id: item?.id,
+        type: item?.type,
+        amount: item?.amount?.toString(),
+        category: item?.category,
+        date: (item.date as Timestamp)?.toDate()?.toString(),
+        description: item?.image,
+        image: item?.image,
+        uid: item?.uid,
+        walletId: item?.walletId,
+      }
+    })
   };
 
   return (
     <View style={styles.container}>
       {title && (
-        <Typo size={25} fontWeight={"800"} style={styles.title}>
+        <Typo size={22} fontWeight={"800"} style={styles.title}>
           {title}
         </Typo>
       )}
@@ -34,14 +48,17 @@ const TransctionList = ({
         data={data}
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item, index }) => (
-          <TransctionItem item={item} index={index} handleClick={handleClick} />
+          <TransctionItem 
+          item={item} 
+          index={index} 
+          handleClick={handleClick} />
         )}
-        estimatedItemSize={82}
+        estimatedItemSize={68}
         showsVerticalScrollIndicator={false}
       />
 
       {!loading && (!data || data.length === 0) && (
-        <Typo size={15} color={colors.neutral400} style={styles.emptyText}>
+        <Typo size={14} color={colors.neutral400} style={styles.emptyText}>
           {emptyListMessage}
         </Typo>
       )}
@@ -59,22 +76,22 @@ const TransctionList = ({
 
 const TransctionItem = ({ item, index, handleClick }: TransactionItemProps) => {
   const category =
-    item?.type == "income" ? incomeCategory : expenseCategories[item.category!];
-  const IconComponent = category.icon;
-   
-  const date = item?.date
-  ? (item.date as Timestamp).toDate().toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short"
-  })
-  : "";
+    item?.type === "income"
+      ? incomeCategory
+      : expenseCategories[item.category!];
 
+  const IconComponent = category.icon;
+
+  const date = item?.date
+    ? (item.date as Timestamp).toDate().toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "short",
+      })
+    : "";
 
   return (
     <Animated.View
-      entering={FadeInDown.delay(index * 55)
-        .springify()
-        .damping(18)}
+      entering={FadeInDown.delay(index * 45).springify().damping(18)}
     >
       <TouchableOpacity
         activeOpacity={0.9}
@@ -82,14 +99,14 @@ const TransctionItem = ({ item, index, handleClick }: TransactionItemProps) => {
         style={styles.cardOuter}
       >
         <View style={styles.cardInner}>
-          {/* Icon with glow */}
+          {/* Icon */}
           <View style={styles.iconGlow}>
             <View
               style={[styles.iconWrap, { backgroundColor: category.bgColor }]}
             >
               {IconComponent && (
                 <IconComponent
-                  size={verticalScale(20)}
+                  size={verticalScale(17)}
                   weight="fill"
                   color={colors.white}
                 />
@@ -97,17 +114,17 @@ const TransctionItem = ({ item, index, handleClick }: TransactionItemProps) => {
             </View>
           </View>
 
-          {/* Middle */}
+          {/* Center */}
           <View style={styles.center}>
-            <Typo size={16.8} fontWeight={"600"}>
+            <Typo size={15.5} fontWeight={"600"}>
               {category.label}
             </Typo>
             <Typo
-              size={12}
+              size={11.5}
               color={colors.neutral400}
               textProps={{ numberOfLines: 1 }}
             >
-              {item?.description}
+              {item?.description || "No description added"}
             </Typo>
           </View>
 
@@ -119,21 +136,26 @@ const TransctionItem = ({ item, index, handleClick }: TransactionItemProps) => {
                 {
                   backgroundColor:
                     item?.type === "income"
-                      ? "rgba(4, 45, 20, 0.93)" // green
-                      : "rgba(239,68,68,0.15)", // red
+                      ? "rgba(34,197,94,0.15)"
+                      : "rgba(239,68,68,0.15)",
                 },
               ]}
             >
               <Typo
-                size={13.5}
+                size={12.8}
                 fontWeight={"700"}
-                color={item?.type == "income" ? colors.primary : colors.rose}
+                color={
+                  item?.type === "income"
+                    ? colors.primary
+                    : colors.rose
+                }
               >
-                {`${item?.type == "income" ? "+ ₹" : "- ₹"}${item?.amount}`}
+                {`${item?.type === "income" ? "+ ₹" : "- ₹"}${item?.amount}`}
               </Typo>
             </View>
-            <Typo size={11.5} color={colors.neutral400}>
-               {date}
+
+            <Typo size={10.8} color={colors.neutral400}>
+              {date}
             </Typo>
           </View>
         </View>
@@ -148,7 +170,7 @@ export default TransctionList;
 
 const styles = StyleSheet.create({
   container: {
-    gap: spacingY._15,
+    gap: spacingY._12,
   },
 
   title: {
@@ -161,64 +183,60 @@ const styles = StyleSheet.create({
   },
 
   loader: {
-    marginTop: verticalScale(120),
+    marginTop: verticalScale(100),
   },
 
-  /* Outer card (depth layer) */
   cardOuter: {
-    marginBottom: spacingY._15,
+    marginBottom: spacingY._12,
     borderRadius: radius._20,
     backgroundColor: "rgba(255,255,255,0.03)",
   },
 
-  /* Inner card (actual surface) */
   cardInner: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacingX._15,
+    gap: spacingX._12,
 
     backgroundColor: colors.neutral900,
-    paddingVertical: spacingY._15,
-    paddingHorizontal: spacingX._15,
+    paddingVertical: spacingY._10,
+    paddingHorizontal: spacingX._12,
     borderRadius: radius._20,
 
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.4,
-    shadowRadius: 20,
-    elevation: 7,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.35,
+    shadowRadius: 18,
+    elevation: 6,
   },
 
-  /* Icon glow wrapper */
   iconGlow: {
     shadowColor: colors.primary,
-    shadowOpacity: 0.35,
-    shadowRadius: 12,
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
     shadowOffset: { width: 0, height: 0 },
   },
 
   iconWrap: {
-    height: verticalScale(46),
+    height: verticalScale(38),
     aspectRatio: 1,
-    borderRadius: radius._15,
+    borderRadius: radius._12,
     justifyContent: "center",
     alignItems: "center",
   },
 
   center: {
     flex: 1,
-    gap: 4,
+    gap: 3,
   },
 
   right: {
     alignItems: "flex-end",
-    gap: 6,
+    gap: 5,
   },
 
   amountBadge: {
-    backgroundColor: "rgba(239,68,68,0.14)",
-    paddingHorizontal: spacingX._12,
-    paddingVertical: 4,
-    borderRadius: radius._15,
+    paddingHorizontal: spacingX._10,
+    paddingVertical: 3,
+    borderRadius: radius._12,
   },
 });

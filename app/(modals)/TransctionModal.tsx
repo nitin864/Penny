@@ -9,8 +9,7 @@ import Typo from "@/components/Typo";
 import { colors, radius, spacingX, spacingY } from "@/constants/theme";
 import { useAuth } from "@/context/authContext";
 import useFetchData from "@/hooks/useFetchData";
-import { createOrUpdateTransaction } from "@/services/transctionServices";
-import { deleteWallet } from "@/services/walletServices";
+import { createOrUpdateTransaction, deleteTransaction } from "@/services/transctionServices";
 import { TransactionType, WalletType } from "@/types";
 import { scale, verticalScale } from "@/utils/styling";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -63,13 +62,13 @@ const oldTransctions = useLocalSearchParams() as paramType;
   const OnDelete = async () => {
     if (!oldTransctions?.id) return;
     setLoading(true);
-    const res = await deleteWallet(oldTransctions.id as string);
+    const res = await deleteTransaction(oldTransctions?.id , oldTransctions.walletId );
     setLoading(false);
 
     if (res.success) {
       router.back();
     } else {
-      Alert.alert("transaction", res.msg);
+      Alert.alert("Transaction", res.msg);
     }
   };
 

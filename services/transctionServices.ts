@@ -1,11 +1,12 @@
 import { firestore } from "@/config/firebase";
 import { TransactionType, WalletType } from "@/types";
 import {
-    collection,
-    doc,
-    getDoc,
-    setDoc,
-    updateDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { uploadFileToCloudinary } from "./imageServices";
 
@@ -194,4 +195,65 @@ const handleTransactionEdit = async (
   });
 
   return { success: true };
+};
+
+
+export const deleteTransaction = async (
+  transactionId: string,
+  walletId: string
+): Promise<ResponseType> => {
+  try {
+    const transactionRef = doc(firestore, "transactions", transactionId);
+    const txSnap = await getDoc(transactionRef);
+
+    if (!txSnap.exists()) {
+      return { success: false, msg: "Transaction not found" };
+    }
+
+    const tx = txSnap.data() as TransactionType;
+
+    const walletRef = doc(firestore, "wallets", walletId);
+    const walletSnap = await getDoc(walletRef);
+
+    if (!walletSnap.exists()) {
+      return { success: false, msg: "Wallet not found" };
+    }
+
+    const wallet = walletSnap.data() as WalletType;
+
+    /* -------- REVERT TRANSACTION EFFECT -------- */
+
+    const delta =
+      tx.type === "income" ? -tx.amount : tx.amount;
+
+    const field =
+      tx.type === "income" ? "totalIncome" : "totalExpenses";
+
+    const updatedAmount = Number(wallet.amount) + delta;
+    const updatedFieldValue = Number(wallet[field]) - tx.amount;
+
+    // Prevent negative balance
+    if (updatedAmount < 0) {
+      return {
+        success: false,
+        msg: "Cannot delete transaction. Wallet balance would go negative.",
+      };
+    }
+
+    /* -------- UPDATE WALLET -------- */
+
+    await updateDoc(walletRef, {
+      amount: updatedAmount,
+      [field]: updatedFieldValue,
+    });
+
+    /* -------- DELETE TRANSACTION -------- */
+
+    await deleteDoc(transactionRef);
+
+    return { success: true };
+  } catch (err: any) {
+    console.log("Delete transaction error:", err);
+    return { success: false, msg: err.message };
+  }
 };

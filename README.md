@@ -13,7 +13,7 @@ This app helps users:
 - Track income & expenses
 - Upload wallet and transaction icons
 - View and update profile
-- Explore an **Insights page (currently under active development)**
+- Explore an Insights page for detail view of your expenses and income in yearly, weekly or monthly view using graphs. 
 
 ---
 

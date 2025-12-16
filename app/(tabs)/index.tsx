@@ -77,8 +77,10 @@ const HomeScreen = () => {
             title="Recent Transctions" 
             data={recentTransactions} 
             loading={transactionsLoading} 
-            emptyListMessage="No Transctions added yet!"
+            emptyListMessage="First Create a Wallet then, Tap “+” to add your first transaction. "
           />
+
+           
 
         </ScrollView>
 

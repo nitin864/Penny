@@ -33,7 +33,7 @@ This app helps users:
 - Edit & delete transactions
 - Date-based transaction tracking
 
-### 📊 Insights (🚧 Under Development)
+### 📊 Insights 
 - Insights screen UI integrated
 - Planned features:
   - Spending analytics

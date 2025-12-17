@@ -82,7 +82,7 @@ const SearchModal = () => {
 
       setTransactions(fetchedTransactions);
     } catch (error) {
-      console.error("Error fetching transactions:", error);
+      
     } finally {
       setLoading(false);
     }

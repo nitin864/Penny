@@ -34,14 +34,14 @@ export const uploadFileToCloudinary = async (
         },
       });
 
-      console.log("upload image result:", response?.data);
+    
 
       return { success: true, data: response?.data?.secure_url };
     }
 
     return { success: false, msg: "No file to upload" };
   } catch (error: any) {
-    console.log("got error uploading the file", JSON.stringify(error, null, 2));
+    
     return {
       success: false,
       msg:

@@ -19,7 +19,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (firebaseUser) => {
-      console.log("firebase user: ", firebaseUser);
+      
 
       if (firebaseUser) {
         setUser({
@@ -101,7 +101,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         setUser(userData);
       }
     } catch (error: any) {
-      console.log("error:", error);
+    
     }
   };
 

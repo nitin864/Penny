@@ -1,0 +1,50 @@
+"filename", "language", "TypeScript", "JSON with Comments", "TypeScript JSX", "JSON", "JavaScript", "HTML", "Markdown", "comment", "blank", "total"
+"/run/media/nitin/developnment_data/reaact/Penny/README.md", "Markdown", 0, 0, 0, 0, 0, 0, 124, 0, 46, 170
+"/run/media/nitin/developnment_data/reaact/Penny/app.json", "JSON with Comments", 0, 48, 0, 0, 0, 0, 0, 0, 1, 49
+"/run/media/nitin/developnment_data/reaact/Penny/app/(auth)/login.tsx", "TypeScript JSX", 0, 0, 110, 0, 0, 0, 0, 3, 18, 131
+"/run/media/nitin/developnment_data/reaact/Penny/app/(auth)/register.tsx", "TypeScript JSX", 0, 0, 132, 0, 0, 0, 0, 3, 15, 150
+"/run/media/nitin/developnment_data/reaact/Penny/app/(auth)/welcome.tsx", "TypeScript JSX", 0, 0, 99, 0, 0, 0, 0, 3, 9, 111
+"/run/media/nitin/developnment_data/reaact/Penny/app/(modals)/SearchModal.tsx", "TypeScript JSX", 0, 0, 402, 0, 0, 0, 0, 11, 55, 468
+"/run/media/nitin/developnment_data/reaact/Penny/app/(modals)/TransctionModal.tsx", "TypeScript JSX", 0, 0, 574, 0, 0, 0, 0, 11, 70, 655
+"/run/media/nitin/developnment_data/reaact/Penny/app/(modals)/WalletModel.tsx", "TypeScript JSX", 0, 0, 245, 0, 0, 0, 0, 0, 32, 277
+"/run/media/nitin/developnment_data/reaact/Penny/app/(modals)/profileModal.tsx", "TypeScript JSX", 0, 0, 172, 0, 0, 0, 0, 2, 29, 203
+"/run/media/nitin/developnment_data/reaact/Penny/app/(tabs)/Profile.tsx", "TypeScript JSX", 0, 0, 623, 0, 0, 0, 0, 12, 71, 706
+"/run/media/nitin/developnment_data/reaact/Penny/app/(tabs)/Wallet.tsx", "TypeScript JSX", 0, 0, 155, 0, 0, 0, 0, 2, 20, 177
+"/run/media/nitin/developnment_data/reaact/Penny/app/(tabs)/_layout.tsx", "TypeScript JSX", 0, 0, 16, 0, 0, 0, 0, 0, 4, 20
+"/run/media/nitin/developnment_data/reaact/Penny/app/(tabs)/index.tsx", "TypeScript JSX", 0, 0, 133, 0, 0, 0, 0, 2, 24, 159
+"/run/media/nitin/developnment_data/reaact/Penny/app/(tabs)/statistics.tsx", "TypeScript JSX", 0, 0, 227, 0, 0, 0, 0, 0, 32, 259
+"/run/media/nitin/developnment_data/reaact/Penny/app/_layout.tsx", "TypeScript JSX", 0, 0, 38, 0, 0, 0, 0, 0, 8, 46
+"/run/media/nitin/developnment_data/reaact/Penny/app/index.tsx", "TypeScript JSX", 0, 0, 26, 0, 0, 0, 0, 6, 10, 42
+"/run/media/nitin/developnment_data/reaact/Penny/components/BackButton.tsx", "TypeScript JSX", 0, 0, 32, 0, 0, 0, 0, 0, 8, 40
+"/run/media/nitin/developnment_data/reaact/Penny/components/Buttton.tsx", "TypeScript JSX", 0, 0, 35, 0, 0, 0, 0, 0, 8, 43
+"/run/media/nitin/developnment_data/reaact/Penny/components/CustomTabs.tsx", "TypeScript JSX", 0, 0, 101, 0, 0, 0, 0, 1, 13, 115
+"/run/media/nitin/developnment_data/reaact/Penny/components/Header.tsx", "TypeScript JSX", 0, 0, 49, 0, 0, 0, 0, 4, 10, 63
+"/run/media/nitin/developnment_data/reaact/Penny/components/HomeCard.tsx", "TypeScript JSX", 0, 0, 123, 0, 0, 0, 0, 3, 21, 147
+"/run/media/nitin/developnment_data/reaact/Penny/components/ImageUpload.tsx", "TypeScript JSX", 0, 0, 104, 0, 0, 0, 0, 1, 19, 124
+"/run/media/nitin/developnment_data/reaact/Penny/components/Input.tsx", "TypeScript JSX", 0, 0, 45, 0, 0, 0, 0, 0, 6, 51
+"/run/media/nitin/developnment_data/reaact/Penny/components/Loading.tsx", "TypeScript JSX", 0, 0, 16, 0, 0, 0, 0, 0, 3, 19
+"/run/media/nitin/developnment_data/reaact/Penny/components/ModalWrapper.tsx", "TypeScript JSX", 0, 0, 24, 0, 0, 0, 0, 0, 6, 30
+"/run/media/nitin/developnment_data/reaact/Penny/components/ScreenWrapper.tsx", "TypeScript JSX", 0, 0, 21, 0, 0, 0, 0, 0, 9, 30
+"/run/media/nitin/developnment_data/reaact/Penny/components/TransctionList.tsx", "TypeScript JSX", 0, 0, 207, 0, 0, 0, 0, 5, 31, 243
+"/run/media/nitin/developnment_data/reaact/Penny/components/Typo.tsx", "TypeScript JSX", 0, 0, 26, 0, 0, 0, 0, 0, 5, 31
+"/run/media/nitin/developnment_data/reaact/Penny/components/WalletListItem.tsx", "TypeScript JSX", 0, 0, 77, 0, 0, 0, 0, 3, 13, 93
+"/run/media/nitin/developnment_data/reaact/Penny/components/data.ts", "TypeScript", 86, 0, 0, 0, 0, 0, 0, 0, 3, 89
+"/run/media/nitin/developnment_data/reaact/Penny/config/firebase.ts", "TypeScript", 17, 0, 0, 0, 0, 0, 0, 7, 3, 27
+"/run/media/nitin/developnment_data/reaact/Penny/constants/index.ts", "TypeScript", 2, 0, 0, 0, 0, 0, 0, 0, 1, 3
+"/run/media/nitin/developnment_data/reaact/Penny/constants/theme.ts", "TypeScript", 62, 0, 0, 0, 0, 0, 0, 0, 4, 66
+"/run/media/nitin/developnment_data/reaact/Penny/context/authContext.tsx", "TypeScript JSX", 0, 0, 110, 0, 0, 0, 0, 1, 19, 130
+"/run/media/nitin/developnment_data/reaact/Penny/eslint.config.js", "JavaScript", 0, 0, 0, 0, 8, 0, 0, 1, 2, 11
+"/run/media/nitin/developnment_data/reaact/Penny/hooks/useFetchData.ts", "TypeScript", 35, 0, 0, 0, 0, 0, 0, 0, 10, 45
+"/run/media/nitin/developnment_data/reaact/Penny/package-lock.json", "JSON", 0, 0, 0, 14481, 0, 0, 0, 0, 1, 14482
+"/run/media/nitin/developnment_data/reaact/Penny/package.json", "JSON", 0, 0, 0, 59, 0, 0, 0, 0, 1, 60
+"/run/media/nitin/developnment_data/reaact/Penny/screenshots/1.html", "HTML", 0, 0, 0, 0, 0, 0, 0, 0, 2, 2
+"/run/media/nitin/developnment_data/reaact/Penny/scripts/reset-project.js", "JavaScript", 0, 0, 0, 0, 87, 0, 0, 10, 16, 113
+"/run/media/nitin/developnment_data/reaact/Penny/services/imageServices.ts", "TypeScript", 53, 0, 0, 0, 0, 0, 0, 0, 15, 68
+"/run/media/nitin/developnment_data/reaact/Penny/services/transctionServices.ts", "TypeScript", 498, 0, 0, 0, 0, 0, 0, 62, 101, 661
+"/run/media/nitin/developnment_data/reaact/Penny/services/userService.ts", "TypeScript", 25, 0, 0, 0, 0, 0, 0, 0, 11, 36
+"/run/media/nitin/developnment_data/reaact/Penny/services/walletServices.tsx", "TypeScript JSX", 0, 0, 88, 0, 0, 0, 0, 0, 18, 106
+"/run/media/nitin/developnment_data/reaact/Penny/tsconfig.json", "JSON with Comments", 0, 18, 0, 0, 0, 0, 0, 0, 2, 20
+"/run/media/nitin/developnment_data/reaact/Penny/types.ts", "TypeScript", 148, 0, 0, 0, 0, 0, 0, 2, 18, 168
+"/run/media/nitin/developnment_data/reaact/Penny/utils/common.ts", "TypeScript", 59, 0, 0, 0, 0, 0, 0, 3, 7, 69
+"/run/media/nitin/developnment_data/reaact/Penny/utils/styling.ts", "TypeScript", 26, 0, 0, 0, 0, 0, 0, 0, 7, 33
+"Total", "-", 1011, 66, 4010, 14540, 95, 0, 124, 158, 837, 20841

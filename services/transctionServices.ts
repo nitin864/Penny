@@ -104,7 +104,6 @@ export const createOrUpdateTransaction = async (
       data: { ...transactionData, id: ref.id } as TransactionType,
     };
   } catch (err: any) {
-    console.log("Transaction error:", err);
     return { success: false, msg: err.message };
   }
 };
@@ -376,7 +375,6 @@ export const deleteTransaction = async (
 
     return { success: true };
   } catch (err: any) {
-    console.log("Delete transaction error:", err);
     return { success: false, msg: err.message };
   }
 };
@@ -460,7 +458,6 @@ export const fetchWeeklyStats = async (
       },
     };
   } catch (err: any) {
-    console.log("Error fetching weekly stats", err);
     return {
       success: false,
       msg: err.message,
@@ -560,7 +557,7 @@ export const fetchMonthlyStats = async (
       },
     };
   } catch (error) {
-    console.error("Error fetching monthly transactions:", error);
+    
     return {
       success: false,
       msg: "Failed to fetch monthly transactions",

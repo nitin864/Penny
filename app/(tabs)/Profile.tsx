@@ -34,7 +34,7 @@ const Profile = () => {
     try {
       await signOut(auth);
     } catch (err) {
-      console.warn("Logout error:", err);
+      
     }
   };
 
@@ -63,8 +63,7 @@ const Profile = () => {
       router.push(item.routeName);
       return;
     }
-
-    console.log("Pressed:", item.title);
+ 
   };
 
   const openLink = (url: string) => {
@@ -150,7 +149,7 @@ const Profile = () => {
         {/* User Profile Card */}
         <View style={styles.profileCard}>
           <LinearGradient
-            colors={["#6366f1", "#8b5cf6"]}
+            colors={[colors.neutral900, colors.neutral800]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.profileGradient}
@@ -166,10 +165,10 @@ const Profile = () => {
             </View>
 
             <View style={styles.nameContainer}>
-              <Typo size={24} fontWeight="700" color={colors.white}>
+              <Typo size={20} fontWeight="700" color={colors.white}>
                 {user?.name}
               </Typo>
-              <Typo size={14} color="rgba(255,255,255,0.8)">
+              <Typo size={13} color="rgba(255,255,255,0.8)">
                 {user?.email}
               </Typo>
             </View>
@@ -246,15 +245,15 @@ const Profile = () => {
                 />
               </View>
               <View style={styles.devInfo}>
-                <Typo size={20} fontWeight="700" color={colors.white}>
+                <Typo size={18} fontWeight="700" color={colors.white}>
                   Nitin
                 </Typo>
-                <Typo size={13} color={colors.neutral400}>
+                <Typo size={12} color={colors.neutral400}>
                   Full-Stack Developer
                 </Typo>
                 <View style={styles.locationContainer}>
-                  <Ionicons name="location" size={scale(12)} color={colors.neutral400} />
-                  <Typo size={12} color={colors.neutral400}>
+                  <Ionicons name="location" size={scale(11)} color={colors.neutral400} />
+                  <Typo size={11} color={colors.neutral400}>
                     Kolkata, India
                   </Typo>
                 </View>
@@ -263,11 +262,11 @@ const Profile = () => {
 
             {/* Bio */}
             <View style={styles.bioContainer}>
-              <Typo size={14} color={colors.neutral300} style={styles.bioText}>
+              <Typo size={13} color={colors.neutral300} style={styles.bioText}>
                 💻 Self-taught Full-Stack & React Native Developer passionate about 
                 building mobile apps and real-time systems that solve real-world problems.
               </Typo>
-              <Typo size={13} color={colors.neutral400} style={styles.bioQuote}>
+              <Typo size={12} color={colors.neutral400} style={styles.bioQuote}>
                 "Mine linux kernel boots faster than your thoughts...!"
               </Typo>
             </View>
@@ -352,28 +351,28 @@ const Profile = () => {
             {/* Stats */}
             <View style={styles.statsContainer}>
               <View style={styles.statItem}>
-                <Typo size={20} fontWeight="700" color={colors.primary}>
+                <Typo size={18} fontWeight="700" color={colors.primary}>
                   17
                 </Typo>
-                <Typo size={12} color={colors.neutral400}>
+                <Typo size={11} color={colors.neutral400}>
                   Repositories
                 </Typo>
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Typo size={20} fontWeight="700" color={colors.primary}>
+                <Typo size={18} fontWeight="700" color={colors.primary}>
                   8
                 </Typo>
-                <Typo size={12} color={colors.neutral400}>
+                <Typo size={11} color={colors.neutral400}>
                   Followers
                 </Typo>
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Typo size={20} fontWeight="700" color={colors.primary}>
+                <Typo size={18} fontWeight="700" color={colors.primary}>
                   3+
                 </Typo>
-                <Typo size={12} color={colors.neutral400}>
+                <Typo size={11} color={colors.neutral400}>
                   Years Exp
                 </Typo>
               </View>
@@ -390,8 +389,8 @@ const Profile = () => {
                 end={{ x: 1, y: 1 }}
                 style={styles.emailGradient}
               >
-                <Ionicons name="mail" size={scale(20)} color={colors.white} />
-                <Typo size={14} fontWeight="600" color={colors.white}>
+                <Ionicons name="mail" size={scale(18)} color={colors.white} />
+                <Typo size={13} fontWeight="600" color={colors.white}>
                   rajnitin793@gmail.com
                 </Typo>
               </LinearGradient>
@@ -430,8 +429,8 @@ const styles = StyleSheet.create({
   },
 
   profileCard: {
-    marginTop: verticalScale(20),
-    marginBottom: spacingY._25,
+    marginTop: verticalScale(15),
+    marginBottom: spacingY._20,
     borderRadius: radius._20,
     overflow: "hidden",
     elevation: 5,
@@ -442,43 +441,43 @@ const styles = StyleSheet.create({
   },
 
   profileGradient: {
-    paddingVertical: spacingY._30,
+    paddingVertical: spacingY._20,
     alignItems: "center",
   },
 
   avatarContainer: {
     position: "relative",
-    marginBottom: spacingY._15,
+    marginBottom: spacingY._10,
   },
 
   avatar: {
-    height: verticalScale(120),
-    width: verticalScale(120),
-    borderRadius: verticalScale(60),
+    height: verticalScale(100),
+    width: verticalScale(100),
+    borderRadius: verticalScale(50),
     backgroundColor: colors.neutral300,
-    borderWidth: 4,
-    borderColor: colors.white,
+    borderWidth: 3,
+    borderColor: "rgba(255,255,255,0.3)",
   },
 
   avatarBorder: {
     position: "absolute",
-    top: -8,
-    left: -8,
-    right: -8,
-    bottom: -8,
-    borderRadius: verticalScale(68),
+    top: -6,
+    left: -6,
+    right: -6,
+    bottom: -6,
+    borderRadius: verticalScale(56),
     borderWidth: 2,
-    borderColor: "rgba(255,255,255,0.3)",
+    borderColor: "rgba(255,255,255,0.2)",
   },
 
   nameContainer: {
     alignItems: "center",
-    gap: verticalScale(4),
+    gap: verticalScale(3),
   },
 
   accountOptions: {
-    marginTop: spacingY._15,
-    gap: spacingY._12,
+    marginTop: spacingY._10,
+    gap: spacingY._10,
   },
 
   listItem: {
@@ -496,13 +495,13 @@ const styles = StyleSheet.create({
   optionContent: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacingX._15,
-    padding: spacingX._15,
+    gap: spacingX._12,
+    padding: spacingX._12,
   },
 
   listIcon: {
-    height: verticalScale(44),
-    width: verticalScale(44),
+    height: verticalScale(38),
+    width: verticalScale(38),
     alignItems: "center",
     justifyContent: "center",
     borderRadius: radius._12,
@@ -513,9 +512,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: colors.neutral800,
-    padding: spacingX._15,
+    padding: spacingX._12,
     borderRadius: radius._15,
-    marginTop: spacingY._20,
+    marginTop: spacingY._15,
     borderWidth: 1,
     borderColor: colors.neutral700,
   },
@@ -529,9 +528,9 @@ const styles = StyleSheet.create({
   devSection: {
     backgroundColor: colors.neutral800,
     borderRadius: radius._20,
-    padding: spacingX._20,
-    marginTop: spacingY._15,
-    gap: spacingY._20,
+    padding: spacingX._15,
+    marginTop: spacingY._12,
+    gap: spacingY._15,
     borderWidth: 1,
     borderColor: colors.neutral700,
   },
@@ -539,15 +538,15 @@ const styles = StyleSheet.create({
   devHeader: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacingX._15,
+    gap: spacingX._12,
   },
 
   devAvatarContainer: {
-    width: scale(70),
-    height: scale(70),
-    borderRadius: scale(35),
+    width: scale(55),
+    height: scale(55),
+    borderRadius: scale(28),
     overflow: "hidden",
-    borderWidth: 3,
+    borderWidth: 2,
     borderColor: colors.primary,
   },
 
@@ -569,29 +568,29 @@ const styles = StyleSheet.create({
   },
 
   bioContainer: {
-    gap: spacingY._7,
-    paddingTop: spacingY._10,
+    gap: spacingY._5,
+    paddingTop: spacingY._7,
     borderTopWidth: 1,
     borderTopColor: colors.neutral700,
   },
 
   bioText: {
-    lineHeight: verticalScale(20),
+    lineHeight: verticalScale(18),
   },
 
   bioQuote: {
     fontStyle: "italic",
-    lineHeight: verticalScale(18),
+    lineHeight: verticalScale(16),
   },
 
   techStackContainer: {
-    paddingTop: spacingY._10,
+    paddingTop: spacingY._7,
     borderTopWidth: 1,
     borderTopColor: colors.neutral700,
   },
 
   sectionTitle: {
-    marginBottom: spacingY._12,
+    marginBottom: spacingY._10,
   },
 
   techGrid: {
@@ -605,50 +604,50 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: spacingX._5,
     backgroundColor: colors.neutral700,
-    paddingHorizontal: spacingX._12,
+    paddingHorizontal: spacingX._10,
     paddingVertical: spacingY._7,
-    borderRadius: radius._12,
+    borderRadius: radius._10,
   },
 
   projectsContainer: {
-    paddingTop: spacingY._10,
+    paddingTop: spacingY._7,
     borderTopWidth: 1,
     borderTopColor: colors.neutral700,
-    gap: spacingY._10,
+    gap: spacingY._7,
   },
 
   projectCard: {
     backgroundColor: colors.neutral700,
-    padding: spacingX._15,
+    padding: spacingX._12,
     borderRadius: radius._12,
-    gap: spacingY._7,
+    gap: spacingY._5,
   },
 
   projectHeader: {
     flexDirection: "row",
     alignItems: "center",
-    gap: spacingX._7,
+    gap: spacingX._5
   },
 
   projectDesc: {
-    lineHeight: verticalScale(16),
+    lineHeight: verticalScale(15),
   },
 
   socialContainer: {
-    paddingTop: spacingY._10,
+    paddingTop: spacingY._5,
     borderTopWidth: 1,
     borderTopColor: colors.neutral700,
   },
 
   socialGrid: {
     flexDirection: "row",
-    gap: spacingX._12,
+    gap: spacingX._10,
   },
 
   socialButton: {
-    width: scale(48),
-    height: scale(48),
-    borderRadius: scale(24),
+    width: scale(42),
+    height: scale(42),
+    borderRadius: scale(21),
     justifyContent: "center",
     alignItems: "center",
     elevation: 3,
@@ -662,13 +661,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     backgroundColor: colors.neutral700,
-    padding: spacingY._15,
+    padding: spacingY._12,
     borderRadius: radius._12,
   },
 
   statItem: {
     alignItems: "center",
-    gap: verticalScale(4),
+    gap: verticalScale(3),
   },
 
   statDivider: {
@@ -685,12 +684,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: spacingX._10,
-    paddingVertical: spacingY._15,
+    gap: spacingX._7,
+    paddingVertical: spacingY._12,
   },
 
   footer: {
-    marginTop: spacingY._35,
+    marginTop: spacingY._25,
     alignItems: "center",
     gap: spacingY._5,
     marginBottom: verticalScale(4),

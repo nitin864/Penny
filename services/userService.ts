@@ -29,7 +29,7 @@ export const updateUser = async (
 
     return { success: true, msg: "Updated Successfully" };
   } catch (error: any) {
-    console.log("error updating the user", error);
+ 
     return { success: false, msg: error?.message ?? "Update failed" };
   }
 };

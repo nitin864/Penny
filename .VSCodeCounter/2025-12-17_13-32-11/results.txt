@@ -1,0 +1,93 @@
+Date : 2025-12-17 13:32:11
+Directory : /run/media/nitin/developnment_data/reaact/Penny
+Total : 48 files,  19846 codes, 158 comments, 837 blanks, all 20841 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JSON               |          2 |     14,540 |          0 |          2 |     14,542 |
+| TypeScript JSX     |         29 |      4,010 |         73 |        586 |      4,669 |
+| TypeScript         |         11 |      1,011 |         74 |        180 |      1,265 |
+| Markdown           |          1 |        124 |          0 |         46 |        170 |
+| JavaScript         |          2 |         95 |         11 |         18 |        124 |
+| JSON with Comments |          2 |         66 |          0 |          3 |         69 |
+| HTML               |          1 |          0 |          0 |          2 |          2 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                             | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                |         48 |     19,846 |        158 |        837 |     20,841 |
+| . (Files)                                                                        |          7 |     14,886 |          3 |         71 |     14,960 |
+| app                                                                              |         14 |      2,952 |         55 |        397 |      3,404 |
+| app (Files)                                                                      |          2 |         64 |          6 |         18 |         88 |
+| app/(auth)                                                                       |          3 |        341 |          9 |         42 |        392 |
+| app/(modals)                                                                     |          4 |      1,393 |         24 |        186 |      1,603 |
+| app/(tabs)                                                                       |          5 |      1,154 |         16 |        151 |      1,321 |
+| components                                                                       |         14 |        946 |         17 |        155 |      1,118 |
+| config                                                                           |          1 |         17 |          7 |          3 |         27 |
+| constants                                                                        |          2 |         64 |          0 |          5 |         69 |
+| context                                                                          |          1 |        110 |          1 |         19 |        130 |
+| hooks                                                                            |          1 |         35 |          0 |         10 |         45 |
+| screenshots                                                                      |          1 |          0 |          0 |          2 |          2 |
+| scripts                                                                          |          1 |         87 |         10 |         16 |        113 |
+| services                                                                         |          4 |        664 |         62 |        145 |        871 |
+| utils                                                                            |          2 |         85 |          3 |         14 |        102 |
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                         | language           | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| /run/media/nitin/developnment_data/reaact/Penny/README.md                        | Markdown           |        124 |          0 |         46 |        170 |
+| /run/media/nitin/developnment_data/reaact/Penny/app.json                         | JSON with Comments |         48 |          0 |          1 |         49 |
+| /run/media/nitin/developnment_data/reaact/Penny/app/(auth)/login.tsx             | TypeScript JSX     |        110 |          3 |         18 |        131 |
+| /run/media/nitin/developnment_data/reaact/Penny/app/(auth)/register.tsx          | TypeScript JSX     |        132 |          3 |         15 |        150 |
+| /run/media/nitin/developnment_data/reaact/Penny/app/(auth)/welcome.tsx           | TypeScript JSX     |         99 |          3 |          9 |        111 |
+| /run/media/nitin/developnment_data/reaact/Penny/app/(modals)/SearchModal.tsx     | TypeScript JSX     |        402 |         11 |         55 |        468 |
+| /run/media/nitin/developnment_data/reaact/Penny/app/(modals)/TransctionModal.tsx | TypeScript JSX     |        574 |         11 |         70 |        655 |
+| /run/media/nitin/developnment_data/reaact/Penny/app/(modals)/WalletModel.tsx     | TypeScript JSX     |        245 |          0 |         32 |        277 |
+| /run/media/nitin/developnment_data/reaact/Penny/app/(modals)/profileModal.tsx    | TypeScript JSX     |        172 |          2 |         29 |        203 |
+| /run/media/nitin/developnment_data/reaact/Penny/app/(tabs)/Profile.tsx           | TypeScript JSX     |        623 |         12 |         71 |        706 |
+| /run/media/nitin/developnment_data/reaact/Penny/app/(tabs)/Wallet.tsx            | TypeScript JSX     |        155 |          2 |         20 |        177 |
+| /run/media/nitin/developnment_data/reaact/Penny/app/(tabs)/_layout.tsx           | TypeScript JSX     |         16 |          0 |          4 |         20 |
+| /run/media/nitin/developnment_data/reaact/Penny/app/(tabs)/index.tsx             | TypeScript JSX     |        133 |          2 |         24 |        159 |
+| /run/media/nitin/developnment_data/reaact/Penny/app/(tabs)/statistics.tsx        | TypeScript JSX     |        227 |          0 |         32 |        259 |
+| /run/media/nitin/developnment_data/reaact/Penny/app/_layout.tsx                  | TypeScript JSX     |         38 |          0 |          8 |         46 |
+| /run/media/nitin/developnment_data/reaact/Penny/app/index.tsx                    | TypeScript JSX     |         26 |          6 |         10 |         42 |
+| /run/media/nitin/developnment_data/reaact/Penny/components/BackButton.tsx        | TypeScript JSX     |         32 |          0 |          8 |         40 |
+| /run/media/nitin/developnment_data/reaact/Penny/components/Buttton.tsx           | TypeScript JSX     |         35 |          0 |          8 |         43 |
+| /run/media/nitin/developnment_data/reaact/Penny/components/CustomTabs.tsx        | TypeScript JSX     |        101 |          1 |         13 |        115 |
+| /run/media/nitin/developnment_data/reaact/Penny/components/Header.tsx            | TypeScript JSX     |         49 |          4 |         10 |         63 |
+| /run/media/nitin/developnment_data/reaact/Penny/components/HomeCard.tsx          | TypeScript JSX     |        123 |          3 |         21 |        147 |
+| /run/media/nitin/developnment_data/reaact/Penny/components/ImageUpload.tsx       | TypeScript JSX     |        104 |          1 |         19 |        124 |
+| /run/media/nitin/developnment_data/reaact/Penny/components/Input.tsx             | TypeScript JSX     |         45 |          0 |          6 |         51 |
+| /run/media/nitin/developnment_data/reaact/Penny/components/Loading.tsx           | TypeScript JSX     |         16 |          0 |          3 |         19 |
+| /run/media/nitin/developnment_data/reaact/Penny/components/ModalWrapper.tsx      | TypeScript JSX     |         24 |          0 |          6 |         30 |
+| /run/media/nitin/developnment_data/reaact/Penny/components/ScreenWrapper.tsx     | TypeScript JSX     |         21 |          0 |          9 |         30 |
+| /run/media/nitin/developnment_data/reaact/Penny/components/TransctionList.tsx    | TypeScript JSX     |        207 |          5 |         31 |        243 |
+| /run/media/nitin/developnment_data/reaact/Penny/components/Typo.tsx              | TypeScript JSX     |         26 |          0 |          5 |         31 |
+| /run/media/nitin/developnment_data/reaact/Penny/components/WalletListItem.tsx    | TypeScript JSX     |         77 |          3 |         13 |         93 |
+| /run/media/nitin/developnment_data/reaact/Penny/components/data.ts               | TypeScript         |         86 |          0 |          3 |         89 |
+| /run/media/nitin/developnment_data/reaact/Penny/config/firebase.ts               | TypeScript         |         17 |          7 |          3 |         27 |
+| /run/media/nitin/developnment_data/reaact/Penny/constants/index.ts               | TypeScript         |          2 |          0 |          1 |          3 |
+| /run/media/nitin/developnment_data/reaact/Penny/constants/theme.ts               | TypeScript         |         62 |          0 |          4 |         66 |
+| /run/media/nitin/developnment_data/reaact/Penny/context/authContext.tsx          | TypeScript JSX     |        110 |          1 |         19 |        130 |
+| /run/media/nitin/developnment_data/reaact/Penny/eslint.config.js                 | JavaScript         |          8 |          1 |          2 |         11 |
+| /run/media/nitin/developnment_data/reaact/Penny/hooks/useFetchData.ts            | TypeScript         |         35 |          0 |         10 |         45 |
+| /run/media/nitin/developnment_data/reaact/Penny/package-lock.json                | JSON               |     14,481 |          0 |          1 |     14,482 |
+| /run/media/nitin/developnment_data/reaact/Penny/package.json                     | JSON               |         59 |          0 |          1 |         60 |
+| /run/media/nitin/developnment_data/reaact/Penny/screenshots/1.html               | HTML               |          0 |          0 |          2 |          2 |
+| /run/media/nitin/developnment_data/reaact/Penny/scripts/reset-project.js         | JavaScript         |         87 |         10 |         16 |        113 |
+| /run/media/nitin/developnment_data/reaact/Penny/services/imageServices.ts        | TypeScript         |         53 |          0 |         15 |         68 |
+| /run/media/nitin/developnment_data/reaact/Penny/services/transctionServices.ts   | TypeScript         |        498 |         62 |        101 |        661 |
+| /run/media/nitin/developnment_data/reaact/Penny/services/userService.ts          | TypeScript         |         25 |          0 |         11 |         36 |
+| /run/media/nitin/developnment_data/reaact/Penny/services/walletServices.tsx      | TypeScript JSX     |         88 |          0 |         18 |        106 |
+| /run/media/nitin/developnment_data/reaact/Penny/tsconfig.json                    | JSON with Comments |         18 |          0 |          2 |         20 |
+| /run/media/nitin/developnment_data/reaact/Penny/types.ts                         | TypeScript         |        148 |          2 |         18 |        168 |
+| /run/media/nitin/developnment_data/reaact/Penny/utils/common.ts                  | TypeScript         |         59 |          3 |          7 |         69 |
+| /run/media/nitin/developnment_data/reaact/Penny/utils/styling.ts                 | TypeScript         |         26 |          0 |          7 |         33 |
+| Total                                                                            |                    |     19,846 |        158 |        837 |     20,841 |
++----------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+

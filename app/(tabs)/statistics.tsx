@@ -3,9 +3,10 @@ import Loading from "@/components/Loading";
 import ScreenWrapper from "@/components/ScreenWrapper";
 import { colors, radius, spacingX, spacingY } from "@/constants/theme";
 import { useAuth } from "@/context/authContext";
+import { fetchWeeklyStats } from "@/services/transctionServices";
 import { scale, verticalScale } from "@/utils/styling";
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
 import SegmentedControlTab from "react-native-segmented-control-tab";
 
@@ -112,9 +113,24 @@ const Statistics = () => {
     }
   }, [activeindex]);
 
-  const getWeeklyStats = async ()=> {
-    
+  const getWeeklyStats = async () => {
+  try {
+    setChartLoading(true);
+
+    const res = await fetchWeeklyStats(user?.uid as string);
+
+    if (res.success && res.data) {
+      setChartData(res.data.stats);
+    } else {
+      Alert.alert("Error", res.msg ?? "Failed to fetch weekly stats");
+    }
+  } catch (error) {
+    Alert.alert("Error", "Something went wrong while fetching stats");
+  } finally {
+    setChartLoading(false);
   }
+};
+
   const getMonthlyStats = async ()=> {
     
   }

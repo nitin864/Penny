@@ -60,11 +60,11 @@ export const createOrUpdateTransaction = async (
           walletId
         );
         if (!res.success) {
-        return {
-          success: false,
-          msg: res.msg,
-        };
-      }
+          return {
+            success: false,
+            msg: res.msg,
+          };
+        }
       }
     }
 
@@ -152,11 +152,110 @@ const handleTransactionEdit = async (
   newType: string,
   newWalletId: string
 ): Promise<ResponseType> => {
+  const sameWallet = oldTx.walletId === newWalletId;
+
+  /* ----------- SAME WALLET EDIT ----------- */
+  if (sameWallet) {
+    return await handleSameWalletEdit(oldTx, newAmount, newType);
+  }
+
+  /* ----------- DIFFERENT WALLET EDIT ----------- */
+  return await handleDifferentWalletEdit(oldTx, newAmount, newType, newWalletId);
+};
+
+/* =====================================================
+   HANDLE EDIT IN SAME WALLET
+===================================================== */
+
+const handleSameWalletEdit = async (
+  oldTx: TransactionType,
+  newAmount: number,
+  newType: string
+): Promise<ResponseType> => {
+  const walletRef = doc(firestore, "wallets", oldTx.walletId);
+  const walletSnap = await getDoc(walletRef);
+
+  if (!walletSnap.exists()) {
+    return { success: false, msg: "Wallet not found" };
+  }
+
+  const wallet = walletSnap.data() as WalletType;
+  let updatedAmount = Number(wallet.amount);
+  let updatedIncome = Number(wallet.totalIncome || 0);
+  let updatedExpense = Number(wallet.totalExpenses || 0);
+
+  /* ----------- CASE 1: SAME TYPE (income -> income OR expense -> expense) ----------- */
+  if (oldTx.type === newType) {
+    const amountDifference = newAmount - oldTx.amount;
+
+    if (newType === "income") {
+      updatedAmount += amountDifference;
+      updatedIncome += amountDifference;
+    } else {
+      // Check if we have enough balance for additional expense
+      if (amountDifference > 0 && updatedAmount < amountDifference) {
+        return { success: false, msg: "Insufficient balance" };
+      }
+      updatedAmount -= amountDifference;
+      updatedExpense += amountDifference;
+    }
+  }
+  /* ----------- CASE 2: TYPE CHANGED (income -> expense OR expense -> income) ----------- */
+  else {
+    // Revert old transaction
+    if (oldTx.type === "income") {
+      updatedAmount -= oldTx.amount; // Remove the income
+      updatedIncome -= oldTx.amount; // Reduce total income
+    } else {
+      updatedAmount += oldTx.amount; // Add back the expense
+      updatedExpense -= oldTx.amount; // Reduce total expense
+    }
+
+    // Apply new transaction
+    if (newType === "income") {
+      updatedAmount += newAmount;
+      updatedIncome += newAmount;
+    } else {
+      // Check if we have enough balance
+      if (updatedAmount < newAmount) {
+        return { success: false, msg: "Insufficient balance" };
+      }
+      updatedAmount -= newAmount;
+      updatedExpense += newAmount;
+    }
+  }
+
+  // Prevent negative balance
+  if (updatedAmount < 0) {
+    return { success: false, msg: "Insufficient balance" };
+  }
+
+  await updateDoc(walletRef, {
+    amount: updatedAmount,
+    totalIncome: updatedIncome,
+    totalExpenses: updatedExpense,
+  });
+
+  return { success: true };
+};
+
+/* =====================================================
+   HANDLE EDIT WITH DIFFERENT WALLET
+===================================================== */
+
+const handleDifferentWalletEdit = async (
+  oldTx: TransactionType,
+  newAmount: number,
+  newType: string,
+  newWalletId: string
+): Promise<ResponseType> => {
   const oldWalletRef = doc(firestore, "wallets", oldTx.walletId);
   const newWalletRef = doc(firestore, "wallets", newWalletId);
 
-  const oldSnap = await getDoc(oldWalletRef);
-  const newSnap = await getDoc(newWalletRef);
+  const [oldSnap, newSnap] = await Promise.all([
+    getDoc(oldWalletRef),
+    getDoc(newWalletRef),
+  ]);
 
   if (!oldSnap.exists() || !newSnap.exists()) {
     return { success: false, msg: "Wallet not found" };
@@ -165,46 +264,61 @@ const handleTransactionEdit = async (
   const oldWallet = oldSnap.data() as WalletType;
   const newWallet = newSnap.data() as WalletType;
 
-  /* ----------- REVERT OLD TRANSACTION ----------- */
+  /* ----------- REVERT OLD TRANSACTION FROM OLD WALLET ----------- */
+  let oldWalletAmount = Number(oldWallet.amount);
+  let oldWalletIncome = Number(oldWallet.totalIncome || 0);
+  let oldWalletExpense = Number(oldWallet.totalExpenses || 0);
 
-  const revertDelta =
-    oldTx.type === "income" ? -oldTx.amount : oldTx.amount;
+  if (oldTx.type === "income") {
+    oldWalletAmount -= oldTx.amount; // Remove the income
+    oldWalletIncome -= oldTx.amount; // Reduce total income
+  } else {
+    oldWalletAmount += oldTx.amount; // Add back the expense
+    oldWalletExpense -= oldTx.amount; // Reduce total expense
+  }
 
-  const revertField =
-    oldTx.type === "income" ? "totalIncome" : "totalExpenses";
+  /* ----------- APPLY NEW TRANSACTION TO NEW WALLET ----------- */
+  let newWalletAmount = Number(newWallet.amount);
+  let newWalletIncome = Number(newWallet.totalIncome || 0);
+  let newWalletExpense = Number(newWallet.totalExpenses || 0);
 
-  const revertedAmount = Number(oldWallet.amount) + revertDelta;
+  if (newType === "income") {
+    newWalletAmount += newAmount;
+    newWalletIncome += newAmount;
+  } else {
+    // Check if new wallet has enough balance
+    if (newWalletAmount < newAmount) {
+      return { success: false, msg: "Insufficient balance in target wallet" };
+    }
+    newWalletAmount -= newAmount;
+    newWalletExpense += newAmount;
+  }
 
-  const revertedTotal =
-    Number(oldWallet[revertField]) - oldTx.amount;
-
-  /* ----------- APPLY NEW TRANSACTION ----------- */
-
-  if (newType === "expense" && newWallet.amount! < newAmount) {
+  // Prevent negative balances
+  if (oldWalletAmount < 0 || newWalletAmount < 0) {
     return { success: false, msg: "Insufficient balance" };
   }
 
-  const applyDelta = newType === "income" ? newAmount : -newAmount;
-  const applyField =
-    newType === "income" ? "totalIncome" : "totalExpenses";
-
-  /* ----------- UPDATE OLD WALLET ----------- */
-
-  await updateDoc(oldWalletRef, {
-    amount: revertedAmount,
-    [revertField]: revertedTotal,
-  });
-
-  /* ----------- UPDATE NEW WALLET ----------- */
-
-  await updateDoc(newWalletRef, {
-    amount: Number(newWallet.amount) + applyDelta,
-    [applyField]: Number(newWallet[applyField]) + newAmount,
-  });
+  /* ----------- UPDATE BOTH WALLETS ----------- */
+  await Promise.all([
+    updateDoc(oldWalletRef, {
+      amount: oldWalletAmount,
+      totalIncome: oldWalletIncome,
+      totalExpenses: oldWalletExpense,
+    }),
+    updateDoc(newWalletRef, {
+      amount: newWalletAmount,
+      totalIncome: newWalletIncome,
+      totalExpenses: newWalletExpense,
+    }),
+  ]);
 
   return { success: true };
 };
 
+/* =====================================================
+   DELETE TRANSACTION
+===================================================== */
 
 export const deleteTransaction = async (
   transactionId: string,
@@ -230,15 +344,17 @@ export const deleteTransaction = async (
     const wallet = walletSnap.data() as WalletType;
 
     /* -------- REVERT TRANSACTION EFFECT -------- */
+    let updatedAmount = Number(wallet.amount);
+    let updatedIncome = Number(wallet.totalIncome || 0);
+    let updatedExpense = Number(wallet.totalExpenses || 0);
 
-    const delta =
-      tx.type === "income" ? -tx.amount : tx.amount;
-
-    const field =
-      tx.type === "income" ? "totalIncome" : "totalExpenses";
-
-    const updatedAmount = Number(wallet.amount) + delta;
-    const updatedFieldValue = Number(wallet[field]) - tx.amount;
+    if (tx.type === "income") {
+      updatedAmount -= tx.amount; // Remove the income
+      updatedIncome -= tx.amount; // Reduce total income
+    } else {
+      updatedAmount += tx.amount; // Add back the expense
+      updatedExpense -= tx.amount; // Reduce total expense
+    }
 
     // Prevent negative balance
     if (updatedAmount < 0) {
@@ -249,14 +365,13 @@ export const deleteTransaction = async (
     }
 
     /* -------- UPDATE WALLET -------- */
-
     await updateDoc(walletRef, {
       amount: updatedAmount,
-      [field]: updatedFieldValue,
+      totalIncome: updatedIncome,
+      totalExpenses: updatedExpense,
     });
 
     /* -------- DELETE TRANSACTION -------- */
-
     await deleteDoc(transactionRef);
 
     return { success: true };
@@ -266,7 +381,10 @@ export const deleteTransaction = async (
   }
 };
 
- 
+/* =====================================================
+   FETCH WEEKLY STATS
+===================================================== */
+
 type WeeklyStatsData = {
   stats: Array<{
     value: number;
@@ -278,7 +396,6 @@ type WeeklyStatsData = {
   transactions: TransactionType[];
 };
 
- 
 export const fetchWeeklyStats = async (
   uid: string
 ): Promise<ResponseType<WeeklyStatsData>> => {
@@ -289,11 +406,11 @@ export const fetchWeeklyStats = async (
     sevenDaysAgo.setDate(today.getDate() - 7);
 
     const transactionsQuery = query(
-      collection(db, 'transactions'),
+      collection(db, "transactions"),
+      where("uid", "==", uid),
       where("date", ">=", Timestamp.fromDate(sevenDaysAgo)),
       where("date", "<=", Timestamp.fromDate(today)),
-      orderBy("date", "desc"),
-      where("uid", "==", uid)
+      orderBy("date", "desc")
     );
 
     const querySnapshot = await getDocs(transactionsQuery);
@@ -310,13 +427,13 @@ export const fetchWeeklyStats = async (
         .toISOString()
         .split("T")[0];
 
-      const dayDate = weeklyData.find((day) => day.date == transactionDate);
+      const dayData = weeklyData.find((day) => day.date === transactionDate);
 
-      if (dayDate) {
-        if (transaction.type == "income") {
-          dayDate.income += transaction.amount;
-        } else if (transaction.type == "expense") {
-          dayDate.expense += transaction.amount;
+      if (dayData) {
+        if (transaction.type === "income") {
+          dayData.income += transaction.amount;
+        } else if (transaction.type === "expense") {
+          dayData.expense += transaction.amount;
         }
       }
     });

@@ -1,7 +1,7 @@
 import { firestore } from "@/config/firebase";
 import { colors } from "@/constants/theme";
 import { TransactionType, WalletType } from "@/types";
-import { getLast7Days } from "@/utils/common";
+import { getLast12Months, getLast7Days } from "@/utils/common";
 import { scale } from "@/utils/styling";
 import {
   collection,
@@ -464,6 +464,106 @@ export const fetchWeeklyStats = async (
     return {
       success: false,
       msg: err.message,
+    };
+  }
+};
+
+ 
+type MonthlyStatsData = {
+  stats: Array<{
+    value: number;
+    label?: string;
+    spacing?: number;
+    labelWidth?: number;
+    frontColor: string;
+  }>;
+  transactions: TransactionType[];
+};
+
+// Update the function signature
+export const fetchMonthlyStats = async (
+  uid: string
+): Promise<ResponseType<MonthlyStatsData>> => {  // Changed from ResponseType to ResponseType<MonthlyStatsData>
+  try {
+    const db = firestore;
+    const today = new Date();
+    const twelveMonthsAgo = new Date(today);
+    twelveMonthsAgo.setMonth(today.getMonth() - 12);
+
+    /* ---------------------------------
+       Query transactions (last 12 months)
+    ---------------------------------- */
+    const transactionsQuery = query(
+      collection(db, "transactions"),
+      where("uid", "==", uid),  // Move uid clause first
+      where("date", ">=", Timestamp.fromDate(twelveMonthsAgo)),
+      where("date", "<=", Timestamp.fromDate(today)),
+      orderBy("date", "desc")
+    );
+
+    const querySnapshot = await getDocs(transactionsQuery);
+    const monthlyData = getLast12Months();
+    const transactions: TransactionType[] = [];
+
+    /* ---------------------------------
+       Process transactions
+    ---------------------------------- */
+    querySnapshot.forEach((doc) => {
+      const transaction = doc.data() as TransactionType;
+      transaction.id = doc.id;
+      transactions.push(transaction);
+
+      const transactionDate = (transaction.date as Timestamp).toDate();
+      const monthName = transactionDate.toLocaleString("default", {
+        month: "short",
+      });
+      const shortYear = transactionDate
+        .getFullYear()
+        .toString()
+        .slice(-2);
+
+      const monthData = monthlyData.find(
+        (month) => month.month === `${monthName} ${shortYear}`
+      );
+
+      if (monthData) {
+        if (transaction.type === "income") {
+          monthData.income += transaction.amount;
+        } else if (transaction.type === "expense") {
+          monthData.expense += transaction.amount;
+        }
+      }
+    });
+
+    /* ---------------------------------
+       Format data for bar chart
+    ---------------------------------- */
+    const stats = monthlyData.flatMap((month) => [
+      {
+        value: month.income,
+        label: month.month,
+        spacing: scale(4),
+        labelWidth: scale(46),
+        frontColor: colors.primary,
+      },
+      {
+        value: month.expense,
+        frontColor: colors.rose,
+      },
+    ]);
+
+    return {
+      success: true,
+      data: {
+        stats,
+        transactions,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching monthly transactions:", error);
+    return {
+      success: false,
+      msg: "Failed to fetch monthly transactions",
     };
   }
 };

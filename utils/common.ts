@@ -15,3 +15,41 @@ export const getLast7Days = () => {
   return result.reverse();
   // returns an array of all the previous 7 days
 };
+
+export const getLast12Months = () => {
+  const monthsOfYear = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const result = [];
+
+  for (let i = 11; i >= 0; i--) {
+    const date = new Date();
+    date.setMonth(date.getMonth() - i);
+
+    const monthName = monthsOfYear[date.getMonth()];
+    const shortYear = date.getFullYear().toString().slice(-2);
+    const formattedMonthYear = `${monthName} ${shortYear}`; // Jan 24, Feb 25
+    const formattedDate = date.toISOString().split("T")[0];
+
+    result.push({
+      month: formattedMonthYear,
+      fullDate: formattedDate,
+      income: 0,
+      expense: 0,
+    });
+  }
+
+  // return result;
+  return result.reverse();
+};

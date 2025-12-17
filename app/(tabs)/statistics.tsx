@@ -1,9 +1,13 @@
 import Header from "@/components/Header";
 import Loading from "@/components/Loading";
 import ScreenWrapper from "@/components/ScreenWrapper";
+import TransctionList from "@/components/TransctionList";
 import { colors, radius, spacingX, spacingY } from "@/constants/theme";
 import { useAuth } from "@/context/authContext";
-import { fetchWeeklyStats } from "@/services/transctionServices";
+import {
+  fetchMonthlyStats,
+  fetchWeeklyStats,
+} from "@/services/transctionServices";
 import { scale, verticalScale } from "@/utils/styling";
 import React, { useEffect, useState } from "react";
 import { Alert, ScrollView, StyleSheet, View } from "react-native";
@@ -12,131 +16,61 @@ import SegmentedControlTab from "react-native-segmented-control-tab";
 
 const Statistics = () => {
   const [activeindex, setActiveIndex] = useState(0);
-  const {user} = useAuth();
-  const [chartData, setChartData] = useState([
-    {
-      value: 4000,
-      label: "Mon",
-      spacing: scale(4),
-      labelWidth: scale(30),
-      frontColor: colors.primary,
-    },
-    {
-      value: 2000,
-      frontColor: colors.rose,
-    },
+  const { user } = useAuth();
+  const [chartData, setChartData] = useState([]);
+  const [transactions, setTransactions] = useState([]);
+  const [chartLoading, setChartLoading] = useState(false);
 
-    {
-      value: 5000,
-      label: "Tue",
-      spacing: scale(4),
-      labelWidth: scale(30),
-      frontColor: colors.primary,
-    },
-    {
-      value: 3000,
-      frontColor: colors.rose,
-    },
-
-    {
-      value: 7500,
-      label: "Wed",
-      spacing: scale(4),
-      labelWidth: scale(30),
-      frontColor: colors.primary,
-    },
-    {
-      value: 2500,
-      frontColor: colors.rose,
-    },
-
-    {
-      value: 3000,
-      label: "Thu",
-      spacing: scale(4),
-      labelWidth: scale(30),
-      frontColor: colors.primary,
-    },
-    {
-      value: 1500,
-      frontColor: colors.rose,
-    },
-
-    {
-      value: 6500,
-      label: "Fri",
-      spacing: scale(4),
-      labelWidth: scale(30),
-      frontColor: colors.primary,
-    },
-    {
-      value: 3500,
-      frontColor: colors.rose,
-    },
-
-    {
-      value: 5500,
-      label: "Sat",
-      spacing: scale(4),
-      labelWidth: scale(30),
-      frontColor: colors.primary,
-    },
-    {
-      value: 3000,
-      frontColor: colors.rose,
-    },
-
-    {
-      value: 7000,
-      label: "Sun",
-      spacing: scale(4),
-      labelWidth: scale(30),
-      frontColor: colors.primary,
-    },
-    {
-      value: 2500,
-      frontColor: colors.rose,
-    },
-  ]);
-
-  const [chartLoading , setChartLoading] = useState(false);
-
-  useEffect (()=> {
-    if(activeindex == 0 ){
+  useEffect(() => {
+    if (activeindex == 0) {
       getWeeklyStats();
     }
-    if(activeindex == 0 ){
+    if (activeindex == 1) {
       getMonthlyStats();
     }
-    if(activeindex == 0 ){
+    if (activeindex == 2) {
       getyearlyStats();
     }
   }, [activeindex]);
 
   const getWeeklyStats = async () => {
-  try {
-    setChartLoading(true);
+    try {
+      setChartLoading(true);
 
-    const res = await fetchWeeklyStats(user?.uid as string);
+      const res = await fetchWeeklyStats(user?.uid as string);
 
-    if (res.success && res.data) {
-      setChartData(res.data.stats);
-    } else {
-      Alert.alert("Error", res.msg ?? "Failed to fetch weekly stats");
+      if (res.success && res.data) {
+        setChartData(res.data.stats);
+        setTransactions(res?.data?.transactions);
+      } else {
+        Alert.alert("Error", res.msg ?? "Failed to fetch weekly stats");
+      }
+    } catch (error) {
+      Alert.alert("Error", "Something went wrong while fetching stats");
+    } finally {
+      setChartLoading(false);
     }
-  } catch (error) {
-    Alert.alert("Error", "Something went wrong while fetching stats");
-  } finally {
-    setChartLoading(false);
-  }
-};
+  };
 
-  const getMonthlyStats = async ()=> {
-    
-  }
-  const getyearlyStats = async ()=> {
-    
-  }
+  const getMonthlyStats = async () => {
+    try {
+      setChartLoading(true);
+
+      const res = await fetchMonthlyStats(user?.uid as string);
+
+      if (res.success && res.data) {
+        setChartData(res.data.stats);
+        setTransactions(res?.data?.transactions);
+      } else {
+        Alert.alert("Error", res.msg ?? "Failed to fetch weekly stats");
+      }
+    } catch (error) {
+      Alert.alert("Error", "Something went wrong while fetching stats");
+    } finally {
+      setChartLoading(false);
+    }
+  };
+  const getyearlyStats = async () => {};
 
   return (
     <ScreenWrapper>
@@ -188,23 +122,26 @@ const Statistics = () => {
                   color: colors.neutral350,
                   fontSize: verticalScale(12),
                 }}
- 
-                 
                 noOfSections={4}
                 minHeight={5}
-                 
               />
             ) : (
               <View style={styles.noChart} />
             )}
 
-            {
-              chartLoading && (
-                <View style={styles.chartLoadingContainer}>
-                   <Loading color={colors.white}></Loading>
-                </View>
-              )
-            }
+            {chartLoading && (
+              <View style={styles.chartLoadingContainer}>
+                <Loading color={colors.white}></Loading>
+              </View>
+            )}
+          </View>
+
+          <View>
+            <TransctionList
+              title="Transactions"
+              emptyListMessage="No transactions found"
+              data={transactions}
+            />
           </View>
         </ScrollView>
       </View>
@@ -298,6 +235,4 @@ const styles = StyleSheet.create({
     color: "#000000",
     fontWeight: "600",
   },
-
- 
 });

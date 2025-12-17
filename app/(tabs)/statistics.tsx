@@ -7,6 +7,7 @@ import { useAuth } from "@/context/authContext";
 import {
   fetchMonthlyStats,
   fetchWeeklyStats,
+  fetchYearlyStats,
 } from "@/services/transctionServices";
 import { scale, verticalScale } from "@/utils/styling";
 import React, { useEffect, useState } from "react";
@@ -70,7 +71,26 @@ const Statistics = () => {
       setChartLoading(false);
     }
   };
-  const getyearlyStats = async () => {};
+  const getyearlyStats = async () => {
+    
+        try {
+      setChartLoading(true);
+
+      const res = await fetchYearlyStats(user?.uid as string);
+
+      if (res.success && res.data) {
+        setChartData(res.data.stats);
+        setTransactions(res?.data?.transactions);
+      } else {
+        Alert.alert("Error", res.msg ?? "Failed to fetch weekly stats");
+      }
+    } catch (error) {
+      Alert.alert("Error", "Something went wrong while fetching stats");
+    } finally {
+      setChartLoading(false);
+    }
+
+  };
 
   return (
     <ScreenWrapper>

@@ -53,7 +53,7 @@ const HomeScreen = () => {
               </Typo>
             </View>
 
-            <TouchableOpacity style={styles.search}>
+            <TouchableOpacity onPress={()=> router.push('/(modals)/SearchModal')} style={styles.search}>
               <Icons.MagnifyingGlass
                 size={verticalScale(22)}
                 color={colors.neutral200}

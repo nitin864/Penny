@@ -124,17 +124,6 @@ You can run the app on:
 4.setup Cloudinary for Image Storage
 ---
 
-## 🚧 Current Development Status
-
-| Module | Status |
-|--------|--------|
-| ✅ Wallet Module | Completed |
-| ✅ Transactions Module | Completed |
-| ✅ Profile Module | Completed |
-| 🚧 Insights Module | Under Active Development |
-
----
-
 ## 🎯 Future Improvements
 
 - Interactive charts & analytics
